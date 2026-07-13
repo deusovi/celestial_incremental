@@ -8,6 +8,7 @@ var layoutInfo = {
 
 // A "ghost" layer which offsets other layers in the tree
 addNode("blank", {
+    symbol: "",
     nodeStyle() {
         if (options.menuType == 'Tab') return {display: "none !important"}
         return {}

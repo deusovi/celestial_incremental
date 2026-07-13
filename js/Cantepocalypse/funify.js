@@ -132,7 +132,7 @@
         return !player.fu.jocusCelestialActivate ? "Funify" : "Jocus, Celestial of Fun"
     },
     color: "#fcff04",
-    branches: ["oi", 'gs'],
+    branches: ["cp"],
     update(delta) {
         let onepersec = new Decimal(1)
 

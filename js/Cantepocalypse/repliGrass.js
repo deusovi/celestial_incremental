@@ -33,7 +33,7 @@ addLayer("rg", {
     },
     nodeStyle() {},
     tooltip: "Repli-Grass",
-    branches: ["rt"],
+    branches: ["pr","rt"],
     color: "#67cc3b",
     update(delta) {
         // REPLI-GRASS CAP

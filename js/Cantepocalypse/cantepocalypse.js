@@ -49,7 +49,7 @@
         return "Alternate Origin"
     },
     color: "#398",
-    branches: ["ar", "pr"],
+    branches: ["oi", "pm", "gs"],
     update(delta) {
         let onepersec = new Decimal(1)
 

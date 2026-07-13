@@ -11,7 +11,7 @@
 		"tav.js", "Infinity/tavDomain.js", "breakInfinity.js", "lore.js", "otfMastery.js",
 		"infinityDimensions.js", "cante.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
-		"Cantepocalypse/oil.js", "Singularity/singularity.js", "epicPets.js", "pollinator.js", "factory.js",
+		"Cantepocalypse/oil.js", "Cantepocalypse/protoMemories.js", "Singularity/singularity.js", "epicPets.js", "pollinator.js", "factory.js",
 		"Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js", "Hall of Celestials/celestialHall.js",
 		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/jukebox.js", "Misc/hotkeys.js", "Check Back/pet.js",
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
@@ -210,7 +210,7 @@ function updateStyles() {
 			if (player.subtabs["ca"]["stuff"] == "Trials" || player.subtabs["ca"]["stuff"] == "THE BARRIER") layerBG = "#1f1e33"
 			break;
 		case "cp": case "ar": case "pr": case "an": case "rt":
-		case "rg": case "gs": case "oi": case "fu":
+		case "rg": case "gs": case "oi": case "fu": case "pm":
 			layerBG = "#204387"
 			break;
 		case "en":

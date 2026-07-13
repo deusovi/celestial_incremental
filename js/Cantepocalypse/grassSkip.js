@@ -42,7 +42,7 @@
         }
     },
     tooltip: "Grass-Skip",
-    branches: ["rg"],
+    branches: ["an","rg"],
     color: "#bfc66a",
     update(delta) {
         let onepersec = new Decimal(1)

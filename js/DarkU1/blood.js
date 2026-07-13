@@ -35,7 +35,7 @@
         };
     },
     tooltip: "Blood",
-    branches: [["le", "#f57171ff"]],
+    branches: [["le", "#309"]],
     color: "#4f1818ff",
     update(delta) {
         let onepersec = new Decimal(1)

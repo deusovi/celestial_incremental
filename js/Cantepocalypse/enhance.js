@@ -32,7 +32,7 @@
     nodeStyle() {
     },
     tooltip: "Enhance",
-    branches: ["gs", "rg", "fu"],
+    branches: ["fu"],
     color: "#b82fbd",
     update(delta) {
         let onepersec = new Decimal(1)

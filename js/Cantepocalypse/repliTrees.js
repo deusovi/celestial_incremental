@@ -37,7 +37,6 @@
     nodeStyle() {
     },
     tooltip: "Repli-Trees",
-    branches: ["an"],
     color: "#1cffac",
     update(delta) {
         let onepersec = new Decimal(1)

@@ -28,7 +28,6 @@
     nodeStyle() {
     },
     tooltip: "Perks",
-    branches: ["ar"],
     color: "#1D36A0",
     update(delta) {
         let onepersec = new Decimal(1)

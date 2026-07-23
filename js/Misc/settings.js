@@ -204,7 +204,7 @@ addLayer("settings", {
                 options.menuType = "Tree"
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -223,7 +223,7 @@ addLayer("settings", {
                 options.menuType = "Tab"
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -242,7 +242,26 @@ addLayer("settings", {
                 options.menuType = "Grid"
             },
             style() {
-                let look = {width: '100px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                if (this.canClick()) {
+                    look.background = "var(--miscButton)"
+                    look.border = "3px solid var(--miscButtonDisable)"
+                } else {
+                    look.background = "var(--miscButtonDisable)"
+                    look.border = "3px solid var(--layerBackground)"
+                }
+                return look
+            },
+        },
+        34: {
+            title: "Map Layout",
+            canClick() {return options.menuType != "Map"},
+            unlocked: "true",
+            onClick() {
+                options.menuType = "Map"
+            },
+            style() {
+                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -593,7 +612,8 @@ addLayer("settings", {
                     ["style-row", [
                         ["clickable", 31], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
                         ["clickable", 32], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
-                        ["clickable", 33],
+                        ["clickable", 33], ["style-row", [], {width: "3px", height: "45px", background: "var(--regBorder)"}],
+                        ["clickable", 34],
                     ], {width: "306px"}],
                 ], {width: "306px", background: "var(--layerBackground)", border: "3px solid var(--regBorder)"}],
             ]],

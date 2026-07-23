@@ -4,7 +4,7 @@
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: [
-		"layers.js", "cutscene.js", "tree.js", "Overworld/ranks.js", "Overworld/factors.js",
+		"layers.js", "cutscene.js", "tree.js", "mapTree.js", "Overworld/ranks.js", "Overworld/factors.js",
 		"Overworld/prestige.js", "Overworld/trees.js", "Overworld/grass.js", "Overworld/grasshop.js", "Overworld/mods.js",
 		"Check Back/checkback.js", "portal.js", "Overworld/dice.js", "Check Back/evolution.js", "Overworld/rocketFuel.js",
 		"Infinity/infinity.js", "Infinity/antimatterDimensions.js", "Infinity/infinityPoints.js", "Overworld/pests.js",
@@ -1859,7 +1859,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation",
 	"diamondDustReset",
 	"openChest",
-	"checkAchs",
+	"checkAchs", "resetLayer",
 ]
 
 function getStartPoints(){

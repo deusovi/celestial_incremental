@@ -164,6 +164,15 @@
             player.p.crystalEffect = player.p.crystalEffect.min(2)
         }
     },
+
+    resetLayer() {
+        player.p.prestigePoints = new Decimal(0)
+        player.p.prestigePointsToGet = new Decimal(0)
+        player.p.prestigeEffect = new Decimal(1)
+        player.p.prestigeEffect2 = new Decimal(1)
+    },
+    resetChildren: ["r","f"],
+
     prestigeReset()
     {
         player.points = new Decimal(0)

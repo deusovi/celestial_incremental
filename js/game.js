@@ -169,25 +169,22 @@ function generatePoints(layer, diff) {
 	addPoints(layer, tmp[layer].resetGain.times(diff))
 }
 
-function doReset(layer, force=false) {
+function doReset(layer) {
 
 	if (layers[layer].onPrestige) {
 		updateMilestones(layer)
 		run(layers[layer].onPrestige, layers[layer], gain)
 	}
 
+
+
 	updateMilestones(layer)
 	updateAchievements(layer)
 
 
-	
-
-	if (run(layers[layer].resetsNothing, layers[layer])) return
-	tmp[layer].baseAmount = decimalZero // quick fix
-
 
 	player[layer].resetTime = 0
-
+	// this was doubled in the original version of this function and i'm not sure why --Deusovi
 	updateTemp()
 	updateTemp()
 }

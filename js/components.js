@@ -1291,6 +1291,86 @@ function loadVue() {
 		`
 	})
 
+	Vue.component('map-tree', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key},
+		},
+		template: `
+		<div id="scrCon" class="upgScrollRowTable scrollCentered instant noScrollBar" ref='scrollable'>
+			<div class="upgScrollRow" v-bind:style="{width: data.width+'px', height: data.height+'px'}" >
+				<div style="margin:0" v-for="(item, index) of data.nodes">
+					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
+						<div class="upgCol">
+							<tree-node 
+								:layer='item.id' :prev='layer' :abb='tmp[item.id].symbol' :key="key + '-' + r + '-' + item.id"
+								:style = "{position:'relative', left: item.x+'px', top: item.y+'px', 'z-index': 1}"
+							></tree-node>
+						</div>
+					</div>
+				</div>
+
+				<div style="margin:0;width:0;height:0" v-for="(item, index) of data.bridgeNodes">
+
+					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
+						<div class="upgCol">
+							<button 
+							:id = item.id
+							class = "treeNode can"
+							:style = "item.style"
+							v-on:click="function() {
+								if(player.universe == item.uniFrom) {
+									player.universe = item.uniTo
+								}
+							}"> ▼ </button>
+						</div>
+					</div>	
+				</div>
+
+				<div style="margin:0;width:0;height:0" v-for="(item, index) of data.connections">
+					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
+						<div class="upgCol">
+							<div :style=item />
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		`,
+		mounted() {
+			let c = this.$refs.scrollable
+			console.log(c, data.px, data.py)
+			c.scrollLeft = tmp.maptree.mapData.px 
+			c.scrollTop = tmp.maptree.mapData.py 
+		},
+
+		watch: {
+			'data.px': {
+				handler(val, oldVal) {
+					let c = this.$refs.scrollable
+					if(!c) {return}
+					if(val == undefined) {return}
+					this.$nextTick( ()=> {
+						console.log(c,val, oldVal)
+						c.scrollLeft = val
+					})
+				},
+				immediate: true
+			},
+			'data.py': {
+				handler(val, oldVal) {
+					let c = this.$refs.scrollable
+					if(!c) return
+					c.scrollTop = val
+				},
+				immediate: true
+			},
+			
+		}
+	})
+
+	
+
 
 	// Updates the value in player[layer][data]
 	Vue.component('text-input', {

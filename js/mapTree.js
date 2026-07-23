@@ -127,22 +127,23 @@ mapConnections = [
     ['hpw','hve'],
     ['hre','hpw'],
 
-
-    //U2
+    //post-OTF "U1"
     ['d','U2_to_U1'],
     ['rf','U2_to_U1'],
     ['po','d'],
     ['po','rf'],
+
+    ["cr","U2_to_U1"],
+    ["ste","U2_to_U1"],
+    ["tr","cr"],
+    ["tr","st"],
+
+    //U2
     ['ip','po'],
     ['ip','pol'],
     ['ip','ad'],
     ['ta','ad'],
     
-    //post-OTF "U1"
-    ["cr","U2_to_U1"],
-    ["ste","U2_to_U1"],
-    ["tr","cr"],
-    ["tr","st"],
 
     // A1
     ["an","ar"],

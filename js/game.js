@@ -169,6 +169,9 @@ function generatePoints(layer, diff) {
 	addPoints(layer, tmp[layer].resetGain.times(diff))
 }
 
+
+
+// uses wipeLayer and layerChildren
 function doReset(layer) {
 
 	if (layers[layer].onPrestige) {
@@ -176,18 +179,29 @@ function doReset(layer) {
 		run(layers[layer].onPrestige, layers[layer], gain)
 	}
 
-
-
 	updateMilestones(layer)
 	updateAchievements(layer)
 
-
+	//recursively wipe layers
+	//(this part is somewhat inefficient - if A wipes B and C, which both wipe D, then it will reset D multiple times)
+	//(but this shouldn't be a bottleneck)
+	let layersToWipe = layers[layer].layerChildren
+	while(layersToWipe.length > 0) {
+		let l = layersToWipe.pop()
+		if(layers[l].layerChildren)
+			layersToWipe = layersToWipe.concat(layers[l].layerChildren)
+		if(layers[l].wipeLayer)
+			layers[l].wipeLayer()
+	}
 
 	player[layer].resetTime = 0
 	// this was doubled in the original version of this function and i'm not sure why --Deusovi
 	updateTemp()
 	updateTemp()
 }
+
+
+
 
 
 function startChallenge(layer, x) {

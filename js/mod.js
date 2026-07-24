@@ -1860,7 +1860,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation",
 	"diamondDustReset",
 	"openChest",
-	"checkAchs", "resetLayer",
+	"checkAchs", "wipeLayer",
 ]
 
 function getStartPoints(){

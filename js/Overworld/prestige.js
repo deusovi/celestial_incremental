@@ -165,7 +165,7 @@
         }
     },
 
-    resetLayer() {
+    wipeLayer() {
         player.p.prestigePoints = new Decimal(0)
         player.p.prestigePointsToGet = new Decimal(0)
         player.p.prestigeEffect = new Decimal(1)

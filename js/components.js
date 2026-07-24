@@ -1339,7 +1339,6 @@ function loadVue() {
 		`,
 		mounted() {
 			let c = this.$refs.scrollable
-			console.log(c, data.px, data.py)
 			c.scrollLeft = tmp.maptree.mapData.px 
 			c.scrollTop = tmp.maptree.mapData.py 
 		},
@@ -1350,10 +1349,7 @@ function loadVue() {
 					let c = this.$refs.scrollable
 					if(!c) {return}
 					if(val == undefined) {return}
-					this.$nextTick( ()=> {
-						console.log(c,val, oldVal)
-						c.scrollLeft = val
-					})
+					c.scrollLeft = val
 				},
 				immediate: true
 			},

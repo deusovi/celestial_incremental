@@ -204,7 +204,7 @@ addLayer("settings", {
                 options.menuType = "Tree"
             },
             style() {
-                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '74px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -223,7 +223,7 @@ addLayer("settings", {
                 options.menuType = "Tab"
             },
             style() {
-                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '74px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -242,7 +242,7 @@ addLayer("settings", {
                 options.menuType = "Grid"
             },
             style() {
-                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '74px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"
@@ -261,7 +261,7 @@ addLayer("settings", {
                 options.menuType = "Map"
             },
             style() {
-                let look = {width: '70px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
+                let look = {width: '74px', minHeight: '45px', color: "var(--textColor)", borderRadius: '0'}
                 if (this.canClick()) {
                     look.background = "var(--miscButton)"
                     look.border = "3px solid var(--miscButtonDisable)"

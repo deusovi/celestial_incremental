@@ -38,7 +38,7 @@ function updateHotkeys()
 {
     hotkeys = {global: {}};
 
-    for(uni in universes) {
+    for(let uni in universes) {
         if(hotkeys[uni] == undefined)
             hotkeys[uni] = {};
         if(knownHotkeys[uni] == undefined)
@@ -48,24 +48,37 @@ function updateHotkeys()
         
         let hks = layers[layer].hotkeys
         if (hks){
-            for (id in hks){
-                if(!layers[layer].universe && !hks[id].global) continue; // need universe for non-global hotkey
-
-                uniCategory = hks[id].global ? 'global' : layers[layer].universe
-                keyString = hks[id].key
-				hotkeys[uniCategory][keyString] = hks[id]
-                hotkeys[uniCategory][keyString].layer = layer
-                hotkeys[uniCategory][keyString].id = id
-                hotkeys[uniCategory][keyString].uni = layers[layer].universe
+            for (let id in hks){
                 
-                if (hks[id].unlocked === undefined)
-                    hks[id].unlocked = true
+                let uniCategories = []
 
-                if((readData(layers[layer].layerShown) !== false && hks[id].unlocked) || layer == "settings") 
-                    knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
-                
-                // if(layer == 'settings') 
-                //     knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
+                if(hks[id].uniCategories)
+                    uniCategories = hks[id].uniCategories
+                else if(hks[id].global)
+                    uniCategories = ['global']
+                else if(layers[layer].universe)
+                    uniCategories = [layers[layer].universe]
+
+                for(let uc in uniCategories){
+                    let keyString = hks[id].key
+
+                    if(!hotkeys[uc]) hotkeys[uc] = {}
+                    if(!knownHotkeys[uc]) knownHotkeys[uc] = {}
+
+                    hotkeys[uc][keyString] = hks[id]
+                    hotkeys[uc][keyString].layer = layer
+                    hotkeys[uc][keyString].id = id
+                    hotkeys[uc][keyString].uni = layers[layer].universe
+                    
+                    if (hks[id].unlocked === undefined)
+                        hks[id].unlocked = true
+
+                    if((readData(layers[layer].layerShown) !== false && hks[id].unlocked) || layer == "settings") 
+                        knownHotkeys[uc][keyString] = hotkeys[uc][keyString]
+                    
+                    // if(layer == 'settings') 
+                    //     knownHotkeys[uniCategory][keyString] = hotkeys[uniCategory][keyString]
+                }
             }
         }
     }

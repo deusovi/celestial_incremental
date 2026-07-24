@@ -264,6 +264,18 @@
         // Check for achs
         // if (!hasAchievement("achievements", 304) && player.r.pent.gte(80)) completeAchievement("achievements", 304)
     },
+    
+    resetLayer() {
+        player.r.ranksToGet = new Decimal(0)
+        player.r.tiersToGet = new Decimal(0)
+        player.r.tetrsToGet = new Decimal(0)
+        player.r.rank = new Decimal(0)
+        player.r.tier = new Decimal(0)
+        player.r.tetr = new Decimal(0)
+    },
+    resetChildren: [],
+
+
     getRankReq(divider = new Decimal(1)) {
         if (player.r.rank.lte(20)) {
             return player.r.rank.add(1).pow(1.45).div(divider).mul(10)

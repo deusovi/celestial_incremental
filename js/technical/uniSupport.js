@@ -312,6 +312,27 @@ addUniverse("UB", {
     disabled() {return !player.startedGame && player.pol.unlockHive < 2}
 })
 
+addUniverse("TD", {
+    name: "Tav's Domain",
+    symbol: "TD",
+    tree: [["tac"],["tco"],["tma"],["tex"],["tad"]],
+    nodeStyle() {
+        let style = {
+            background: "black",
+            backgroundOrigin: "border-box",
+            borderColor: "#8a0e79",
+            color: "#cf15b6",
+        }
+        if (player.universe=="TD") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
+    },
+    uniShown() { return player.startedGame && tmp.pu.levelables[302].canClick && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+})
+
 addUniverse("BH", {
     name: "Black Heart",
     symbol: "♥",

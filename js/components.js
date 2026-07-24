@@ -801,7 +801,7 @@ function loadVue() {
 						<span v-html="tmp[layer].levelables[data].levelLimit.eq(Infinity) ? 'Lv ' + formatShortestWhole(player[layer].levelables[data][0]) : 'Lv ' + formatShortestWhole(player[layer].levelables[data][0])+'/'+formatShortestWhole(tmp[layer].levelables[data].levelLimit)"></span>
 						<span style='color:#a0b2c6' v-if="tmp[layer].levelables[data].levelLimit.gt(10) && layers[layer].levelableAscend && player[layer].levelables[data][2].gt(0)" v-html="'<br>★ ' + formatShortestWhole(player[layer].levelables[data][2])"></span>
 					</div>
-					<div class="levelableExtraText" v-if="tmp[layer].levelables[data].challengeType" v-html="tmp[layer].levelables[data].challengeType"></div>
+					<div class="levelableExtraText" v-if="getLevelableAmount('pet', 501).gte(1) && tmp[layer].levelables[data].challengeType" v-html="tmp[layer].levelables[data].challengeType"></div>
 				</div>
 				<div class="levelableBottom">
 					<div v-bind:class="{levelableBarText: true, hide: !tmp[layer].levelables[data].barShown}">
@@ -813,7 +813,7 @@ function loadVue() {
 			</button>
 		</div>
 		`
-	})
+	}) // note: levelableExtraText is currently hardcoded for SM/Ec indicators only
 
 	Vue.component('levelable-display', {
 		props: ['layer', 'data'],
@@ -1290,6 +1290,82 @@ function loadVue() {
 		</div>
 		`
 	})
+
+	Vue.component('map-tree', {
+		props: ['layer', 'data', 'look'],
+		computed: {
+			key() {return this.$vnode.key},
+		},
+		template: `
+		<div id="scrCon" class="upgScrollRowTable scrollCentered instant noScrollBar" ref='scrollable'>
+			<div class="upgScrollRow" v-bind:style="{width: data.width+'px', height: data.height+'px'}" >
+				<div style="margin:0" v-for="(item, index) of data.nodes">
+					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
+						<div class="upgCol">
+							<tree-node 
+								:layer='item.id' :prev='layer' :abb='tmp[item.id].symbol' :key="key + '-' + r + '-' + item.id"
+								:style = "{position:'relative', left: item.x+'px', top: item.y+'px', 'z-index': 1}"
+							></tree-node>
+						</div>
+					</div>
+				</div>
+
+				<div style="margin:0;width:0;height:0" v-for="(item, index) of data.bridgeNodes">
+
+					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
+						<div class="upgCol">
+							<button 
+							:id = item.id
+							class = "treeNode can"
+							:style = "item.style"
+							v-on:click="function() {
+								if(player.universe == item.uniFrom) {
+									player.universe = item.uniTo
+								}
+							}"> ▼ </button>
+						</div>
+					</div>	
+				</div>
+
+				<div style="margin:0;width:0;height:0" v-for="(item, index) of data.connections">
+					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
+						<div class="upgCol">
+							<div :style=item />
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>
+		`,
+		mounted() {
+			let c = this.$refs.scrollable
+			c.scrollLeft = tmp.maptree.mapData.px 
+			c.scrollTop = tmp.maptree.mapData.py 
+		},
+
+		watch: {
+			'data.px': {
+				handler(val, oldVal) {
+					let c = this.$refs.scrollable
+					if(!c) {return}
+					if(val == undefined) {return}
+					c.scrollLeft = val
+				},
+				immediate: true
+			},
+			'data.py': {
+				handler(val, oldVal) {
+					let c = this.$refs.scrollable
+					if(!c) return
+					c.scrollTop = val
+				},
+				immediate: true
+			},
+			
+		}
+	})
+
+	
 
 
 	// Updates the value in player[layer][data]

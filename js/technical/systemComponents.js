@@ -52,6 +52,43 @@ var systemComponents = {
 		</button>
 		`
 	},
+
+
+	'split-node': {
+		props: ['layer', 'abb', 'size', 'prev'],
+		template: `
+		<button v-if="nodeShown(layer)"
+			v-bind:id="layer"
+			v-on:click="function() {
+				if(tmp[layer].isLayer && !tmp[layer].onClick) {
+					showTab(layer, prev)
+				}
+				else {run(layers[layer].onClick, layers[layer])}
+			}"
+			v-bind:class="{
+				treeNode: true,
+				smallNode: size == 'small',
+				[layer]: true,
+				tooltipBox: true,
+				ghost: tmp[layer].layerShown == 'ghost',
+				hidden: !tmp[layer].layerShown,
+				locked: tmp[layer].isLayer ? !(player[layer].unlocked || tmp[layer].canReset) : !(tmp[layer].canClick),
+				notify: tmp[layer].notify && player[layer].unlocked,
+				resetNotify: tmp[layer].prestigeNotify,
+				can: ((player[layer].unlocked || tmp[layer].canReset) && tmp[layer].isLayer) || (!tmp[layer].isLayer && tmp[layer].canClick),
+				front: !tmp.scrolled,
+			}"
+			v-bind:style="constructNodeStyle(layer)">
+			<span class="nodeLabel" v-html="(abb !== '' && tmp[layer].image === undefined) ? abb : '&nbsp;'"></span>
+			
+			<node-mark :layer='layer' :data='tmp[layer].marked'></node-mark></span>
+		</button>
+		`
+	},
+
+
+
+
 	//forceTooltip: player[layer].forceTooltip,
 
 	'tab-node': {

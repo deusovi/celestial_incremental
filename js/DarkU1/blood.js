@@ -723,6 +723,9 @@
                             ["layer-proxy", ["bl", [
                                 ["clickable", 11],
                             ]]],
+                            ["layer-proxy", ["ir", [
+                                ["clickable", 21], //geroa
+                            ]]],
                             ["blank", "25px"],
                             ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodStones) + " blood stones." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],
                             ["raw-html", function () { return "You have " + formatWhole(player.bl.bloodGems) + " blood gems." }, { "color": "white", "font-size": "24px", "font-family": "monospace" }],

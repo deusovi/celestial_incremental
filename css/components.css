@@ -94,6 +94,17 @@
 	margin-bottom: 10px;
 }
 
+.map-tree {
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.layer-holder:has(> .map-tree) {
+	scrollbar-width: none;
+}
+
+
 /* Infoboxes */
 .story {
     width: 600px;

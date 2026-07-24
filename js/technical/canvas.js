@@ -28,32 +28,36 @@ function drawTree() {
 	if (!retrieveCanvasData()) return;
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	if (player) {
-		let tree = universes[player.universe]?.tree
-		if (layers[player.tab].innerNodes) {
-			let inner = layers[player.tab].innerNodes
-			for (row in inner) {
-				for (thing in inner[row]) {
-					let layer = inner[row][thing]
-					if (tmp[layer].layerShown == true && tmp[layer].branches) {
-						for (branch in tmp[layer].branches) {
-							drawTreeBranch(layer, tmp[layer].branches[branch])
+		
+		if(options.menuType !== 'Map') {
+			let tree = universes[player.universe]?.tree
+			if (layers[player.tab].innerNodes) {
+				let inner = layers[player.tab].innerNodes
+				for (row in inner) {
+					for (thing in inner[row]) {
+						let layer = inner[row][thing]
+						if (tmp[layer].layerShown == true && tmp[layer].branches) {
+							for (branch in tmp[layer].branches) {
+								drawTreeBranch(layer, tmp[layer].branches[branch])
+							}
+						}
+					}
+				}
+			}
+			if (typeof tree !== "undefined") {
+				for (row in tree) {
+					for (thing in tree[row]) {
+						let layer = tree[row][thing]
+						if (tmp[layer].layerShown == true && tmp[layer].branches){
+							for (branch in tmp[layer].branches) {
+								drawTreeBranch(layer, tmp[layer].branches[branch])
+							}
 						}
 					}
 				}
 			}
 		}
-		if (typeof tree !== "undefined") {
-			for (row in tree) {
-				for (thing in tree[row]) {
-					let layer = tree[row][thing]
-					if (tmp[layer].layerShown == true && tmp[layer].branches){
-						for (branch in tmp[layer].branches) {
-							drawTreeBranch(layer, tmp[layer].branches[branch])
-						}
-					}
-				}
-			}
-		}
+
 		drawComponentBranches(player.tab, tmp[player.tab].upgrades, "upgrade-")
 		drawComponentBranches(player.tab, tmp[player.tab].buyables, "buyable-")
 		drawComponentBranches(player.tab, tmp[player.tab].clickables, "clickable-")

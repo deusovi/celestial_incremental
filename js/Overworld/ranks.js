@@ -264,6 +264,18 @@
         // Check for achs
         // if (!hasAchievement("achievements", 304) && player.r.pent.gte(80)) completeAchievement("achievements", 304)
     },
+    
+    resetLayer() {
+        player.r.ranksToGet = new Decimal(0)
+        player.r.tiersToGet = new Decimal(0)
+        player.r.tetrsToGet = new Decimal(0)
+        player.r.rank = new Decimal(0)
+        player.r.tier = new Decimal(0)
+        player.r.tetr = new Decimal(0)
+    },
+    resetChildren: [],
+
+
     getRankReq(divider = new Decimal(1)) {
         if (player.r.rank.lte(20)) {
             return player.r.rank.add(1).pow(1.45).div(divider).mul(10)
@@ -948,6 +960,24 @@
             onPress() {
                 clickClickable(this.layer, 13)
             },
+        },
+        {
+            key: "t", 
+            description: "Reverse Time",
+            unlocked() {
+                return hasUpgrade("i", 26)
+            },
+            onPress() {
+                if(!player.r.timeReversed){
+                    clickClickable(this.layer, 16)
+                    doPopup("none", "Time Reversal turned on!", "Toggle", 5, "#d82cd4", false)
+                }
+                else {
+                    clickClickable(this.layer, 12)
+                    doPopup("none", "Time Reversal turned off!", "Toggle", 5, "#d82cd4", false)
+                }
+            },
+            style: {color: "white", borderColor: "grey", backgroundColor: "#d82cd4"},
         }
     ],
 

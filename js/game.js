@@ -132,16 +132,6 @@ function canReset(layer)
 		return false
 }
 
-function rowReset(row, layer) {
-	for (lr in ROW_LAYERS[row]){
-		if(layers[lr].doReset) {
-			if (!isNaN(row)) Vue.set(player[lr], "activeChallenge", null) // Exit challenges on any row reset on an equal or higher row
-			run(layers[lr].doReset, layers[lr], layer)
-		}
-		else
-			if(tmp[layer].row > tmp[lr].row && !isNaN(row)) layerDataReset(lr)
-	}
-}
 
 function layerDataReset(layer, keep = []) {
 	let storedData = {unlocked: player[layer].unlocked, forceTooltip: player[layer].forceTooltip, noRespecConfirm: player[layer].noRespecConfirm, prevTab:player[layer].prevTab} // Always keep these
@@ -179,79 +169,40 @@ function generatePoints(layer, diff) {
 	addPoints(layer, tmp[layer].resetGain.times(diff))
 }
 
-function doReset(layer, force=false) {
-	if (tmp[layer].type == "none") return
-	let row = tmp[layer].row
-	if (!force) {
-
-		if (tmp[layer].canReset === false) return;
-
-		if (tmp[layer].baseAmount.lt(tmp[layer].requires)) return;
-		let gain = tmp[layer].resetGain
-		if (tmp[layer].type=="static") {
-			if (tmp[layer].baseAmount.lt(tmp[layer].nextAt)) return;
-			gain =(tmp[layer].canBuyMax ? gain : 1)
-		}
 
 
-		if (layers[layer].onPrestige) {
-			updateMilestones(layer)
-			run(layers[layer].onPrestige, layers[layer], gain)
-		}
+// uses wipeLayer and layerChildren
+function doReset(layer) {
 
-		addPoints(layer, gain)
+	if (layers[layer].onPrestige) {
 		updateMilestones(layer)
-		updateAchievements(layer)
-
-		if (!player[layer].unlocked) {
-			player[layer].unlocked = true;
-			needCanvasUpdate = true;
-
-			if (tmp[layer].increaseUnlockOrder){
-				lrs = tmp[layer].increaseUnlockOrder
-				for (lr in lrs)
-					if (!player[lrs[lr]].unlocked) player[lrs[lr]].unlockOrder++
-			}
-		}
-
+		run(layers[layer].onPrestige, layers[layer], gain)
 	}
 
-	if (run(layers[layer].resetsNothing, layers[layer])) return
-	tmp[layer].baseAmount = decimalZero // quick fix
+	updateMilestones(layer)
+	updateAchievements(layer)
 
-
-	for (layerResetting in layers) {
-		if (row >= layers[layerResetting].row && (!force || layerResetting != layer)) completeChallenge(layerResetting)
-	}
-
-	player.points = (row == 0 ? decimalZero : getStartPoints())
-
-	for (let x = row; x >= 0; x--) rowReset(x, layer)
-	for (r in OTHER_LAYERS){
-		rowReset(r, layer)
+	//recursively wipe layers
+	//(this part is somewhat inefficient - if A wipes B and C, which both wipe D, then it will reset D multiple times)
+	//(but this shouldn't be a bottleneck)
+	let layersToWipe = layers[layer].layerChildren
+	while(layersToWipe.length > 0) {
+		let l = layersToWipe.pop()
+		if(layers[l].layerChildren)
+			layersToWipe = layersToWipe.concat(layers[l].layerChildren)
+		if(layers[l].wipeLayer)
+			layers[l].wipeLayer()
 	}
 
 	player[layer].resetTime = 0
-
+	// this was doubled in the original version of this function and i'm not sure why --Deusovi
 	updateTemp()
 	updateTemp()
 }
 
-function resetRow(row) {
-	if (prompt('Are you sure you want to reset this row? It is highly recommended that you wait until the end of your current run before doing this! Type "I WANT TO RESET THIS" to confirm')!="I WANT TO RESET THIS") return
-	let pre_layers = ROW_LAYERS[row-1]
-	let layers = ROW_LAYERS[row]
-	let post_layers = ROW_LAYERS[row+1]
-	rowReset(row+1, post_layers[0])
-	doReset(pre_layers[0], true)
-	for (let layer in layers) {
-		player[layer].unlocked = false
-		if (player[layer].unlockOrder) player[layer].unlockOrder = 0
-	}
-	player.points = getStartPoints()
-	updateTemp();
-	resizeCanvas();
-}
+
+
+
 
 function startChallenge(layer, x) {
 	let enter = false

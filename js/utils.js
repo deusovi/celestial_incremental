@@ -356,9 +356,7 @@ ctrlDown = false
 document.onkeydown = function (e) {
 	if (player === undefined) return;
 	if(e.target.tagName == "INPUT") return;
-	if(player.ir.inBattle) return; //no hotkeys in battle
-
-	
+	if(player.ir.inBattle) return; //no hotkeys in battle	
 
 	shiftDown = e.shiftKey
 	ctrlDown = e.ctrlKey

@@ -1291,48 +1291,94 @@ function loadVue() {
 		`
 	})
 
-	Vue.component('map-tree', {
+
+
+		Vue.component('map-tree', {
 		props: ['layer', 'data', 'look'],
 		computed: {
 			key() {return this.$vnode.key},
 		},
 		template: `
-		<div id="scrCon" class="upgScrollRowTable scrollCentered instant noScrollBar" ref='scrollable'>
-			<div class="upgScrollRow" v-bind:style="{width: data.width+'px', height: data.height+'px'}" >
-				<div style="margin:0" v-for="(item, index) of data.nodes">
-					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
-						<div class="upgCol">
-							<tree-node 
-								:layer='item.id' :prev='layer' :abb='tmp[item.id].symbol' :key="key + '-' + r + '-' + item.id"
-								:style = "{position:'relative', left: item.x+'px', top: item.y+'px', 'z-index': 1}"
-							></tree-node>
+		<div id="scrCon" class="noScrollBar" ref='scrollable'>
+			<div style="height: 0">
+				<svg version="1.1" baseProfile="full" :width="data.width" :height="data.height" xmlns="http://www.w3.org/2000/svg" style="position:sticky; top: 0; z-index: -1000">
+					<defs>
+						<linearGradient v-for="gs in data.connectionGradients" :id="gs.id" :x1="gs.x1" :x2="gs.x2" :y1="gs.y1" :y2="gs.y2" gradientUnits="userSpaceOnUse">
+							<stop v-for="s in gs.stops" :offset="s.offset" :stop-color="s.color" />
+						</linearGradient>
+					</defs>
+					<g v-for="c in data.connections">
+						<line :x1="c.x1" :y1="c.y1" :x2="c.x2" :y2="c.y2" :stroke="c.style.gradient ? ('url(#' + c.style.gradient + ')') : c.style.color" stroke-width = "10px"/>
+					</g>
+				</svg>
+			</div>
+			<div class="map-tree-uni-row" v-for="ur in data.uniMap" :style="{width: data.width+'px'}">
+				<div class="map-tree-uni" v-for="u in ur" :style="{width: data.clientWidth+'px', height: data.clientHeight+'px'}">
+					<div v-if="mapUniverses[u]" style="display: flex; flex-direction: column; width: 100%; height: 100%">
+						<div class="map-tree-margin-row">
+							<div v-for="bn in data.bridgeNodes[u].top" style="height: 100%; align-content: start;">
+								<button 
+								v-if="bn"
+								:id = "bn.id"
+								class = "topBridgeNode bridgeNode can front"
+								:style = "bn.style"
+								v-on:click="function() {
+									if(player.universe == bn.uniFrom) {
+										player.universe = bn.uniTo
+									}
+								}"> ▲ </button>
+							</div>
+						</div>
+						<div class="map-tree-row" v-for="(row,rowIndex) in mapUniverses[u].tree">
+							<div class="margin-node-holder" v-if="data.bridgeNodes[u].left[rowIndex] || data.bridgeNodes[u].right[rowIndex]">
+								<button 
+								v-if="data.bridgeNodes[u].left[rowIndex]"
+								:id = "data.bridgeNodes[u].left[rowIndex].id"
+								class = "leftBridgeNode bridgeNode can front"
+								:style = "data.bridgeNodes[u].left[rowIndex].style"
+								v-on:click="function() {
+									if(player.universe == data.bridgeNodes[u].left[rowIndex].uniFrom) {
+										player.universe = data.bridgeNodes[u].left[rowIndex].uniTo
+									}
+								}"> ◀ </button>
+							</div>
+							<div class="margin-node-spacer" />
+							<div class="tree-node-holder" v-for="nodeID in row.filter(nodeID => tmp[nodeID].layerShown !== false)">
+								<tree-node 
+									:layer='nodeID' :prev='layer' :abb='readData(layers[nodeID].symbol)' :key="key + '-' + r + '-' + nodeID"
+									:size ='readData(layers[nodeID].size)'
+								></tree-node>
+							</div>
+							<div class="margin-node-spacer" />
+							<div class="margin-node-holder" v-if="data.bridgeNodes[u].left[rowIndex] || data.bridgeNodes[u].right[rowIndex]">
+								<button 
+								v-if="data.bridgeNodes[u].right[rowIndex]"
+								:id = "data.bridgeNodes[u].right[rowIndex].id"
+								class = "rightBridgeNode bridgeNode can front"
+								:style = "data.bridgeNodes[u].right[rowIndex].style"
+								v-on:click="function() {
+									if(player.universe == data.bridgeNodes[u].right[rowIndex].uniFrom) {
+										player.universe = data.bridgeNodes[u].right[rowIndex].uniTo
+									}
+								}"> ▶ </button>
+							</div>
+						</div>
+
+						<div class="map-tree-margin-row" >
+							<div v-for="bn in data.bridgeNodes[u].bottom" style="height: 100%; align-content: end;">
+								<button 
+								v-if="bn"
+								:id = "bn.id"
+								class = "bottomBridgeNode bridgeNode can front"
+								:style = "bn.style"
+								v-on:click="function() {
+									if(player.universe == bn.uniFrom) {
+										player.universe = bn.uniTo
+									}
+								}"> ▼ </button>
+							</div>
 						</div>
 					</div>
-				</div>
-
-				<div style="margin:0;width:0;height:0" v-for="(item, index) of data.bridgeNodes">
-
-					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
-						<div class="upgCol">
-							<button 
-							:id = item.id
-							class = "treeNode can"
-							:style = "item.style"
-							v-on:click="function() {
-								if(player.universe == item.uniFrom) {
-									player.universe = item.uniTo
-								}
-							}"> ▼ </button>
-						</div>
-					</div>	
-				</div>
-
-				<div style="margin:0;width:0;height:0" v-for="(item, index) of data.connections">
-					<div class="upgTable instant" style="width: 0px; height: 0px; align-content: center">
-						<div class="upgCol">
-							<div :style=item />
-						</div>
-					</div>	
 				</div>
 			</div>
 		</div>
@@ -1357,11 +1403,11 @@ function loadVue() {
 				handler(val, oldVal) {
 					let c = this.$refs.scrollable
 					if(!c) return
+					if(val == undefined) {return}
 					c.scrollTop = val
 				},
 				immediate: true
 			},
-			
 		}
 	})
 

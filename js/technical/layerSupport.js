@@ -59,7 +59,7 @@ function updateHotkeys()
                 else if(layers[layer].universe)
                     uniCategories = [layers[layer].universe]
 
-                for(let uc in uniCategories){
+                for(let uc of uniCategories){
                     let keyString = hks[id].key
 
                     if(!hotkeys[uc]) hotkeys[uc] = {}

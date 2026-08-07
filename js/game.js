@@ -188,6 +188,7 @@ function doReset(layer) {
 	let layersToWipe = layers[layer].layerChildren
 	while(layersToWipe.length > 0) {
 		let l = layersToWipe.pop()
+		console.log(l)
 		if(layers[l].layerChildren)
 			layersToWipe = layersToWipe.concat(layers[l].layerChildren)
 		if(layers[l].wipeLayer)

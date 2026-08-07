@@ -170,27 +170,11 @@
         player.p.prestigePointsToGet = new Decimal(0)
         player.p.prestigeEffect = new Decimal(1)
         player.p.prestigeEffect2 = new Decimal(1)
+        player.p.upgrades = []
     },
-    resetChildren: ["r","f"],
+    layerChildren: ["r","f"],
 
-    prestigeReset()
-    {
-        player.points = new Decimal(0)
-        player.r.rank = new Decimal(0)
-        player.r.tier = new Decimal(0)
-        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
-        player.r.ranksToGet = new Decimal(0)
-        player.r.tiersToGet = new Decimal(0)
-        player.r.tetrsToGet = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 19; i++) {
-                player.f.buyables[i] = new Decimal(0)
-            }
-        }
-
-        player.f.factorPower = new Decimal(0)
-    },
+    
     crystalReset()
     {
         player.pe.pests = new Decimal(0)
@@ -303,24 +287,6 @@
         }
     },
     clickables: {
-        2: {
-            title() { return "Buy Max On" },
-            canClick() { return player.p.crystalMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.p.crystalMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        3: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.p.crystalMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.p.crystalMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
         11: {
             title() { return "<h2>Prestige, but reset all ranks and factors.</h2><br><h3>Req: 100,000 Celestial Points</h3>" },
             canClick() { return player.p.prestigePointsToGet.gte(1) && player.points.gte(100000)},
@@ -328,8 +294,8 @@
             onClick() {
                 if (!hasAchievement("achievements", 5)) completeAchievement("achievements", 5)
                 if (!hasAchievement("achievements", 14) && player.r.rank.eq(0) && player.r.tier.eq(0) && player.r.tetr.eq(0)) completeAchievement("achievements", 14)
-                layers.p.prestigeReset()
                 player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet)
+                doReset('p')
             },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px'},
         },
@@ -812,7 +778,7 @@
         ]],
         ["raw-html", () => {return player.p.prestigePointsToGet.gt(player.p.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.p.doomSoftcapStart) + " is raised by ^" + format(player.p.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
         ["row", [
-            ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celesial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return hasUpgrade("p", 12) ? "Boosts celestial points by x" + format(player.p.prestigeEffect) : ""}, {color: "#31aeb0", fontSize: "20px", fontFamily: "monospace"}],
             ["raw-html", () => {return hasUpgrade("p", 12) && player.p.prestigePoints.gte("1e100000") ? "[SOFTCAPPED]" : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}],
         ], () => {return hasUpgrade("p", 12) ? {} : {display: "none !important"}}],
         ["row", [

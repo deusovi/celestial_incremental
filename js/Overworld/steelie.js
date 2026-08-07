@@ -11,7 +11,7 @@ addLayer("ste", {
     nodeStyle() {
         return { color: "white", borderColor: "black", backgroundColor: "grey" }
     },
-    tooltip: "Time Reversal",
+    tooltip: "Steelie",
     update(delta) {
     },
     tabFormat: [

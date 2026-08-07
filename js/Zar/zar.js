@@ -1,6 +1,6 @@
 ﻿addLayer("za", {
     name: "Zar", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "<h4>⚅", // This appears on the layer's node. Default is the id with the first letter capitalized
+    symbol: "⚅", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "DS",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
@@ -25,8 +25,6 @@
             "background-origin": "border-box",
             "border-color": "#ddddddff",
             "color": "#0e0e0eff",
-            borderRadius: "4px",
-            transform: "translateY(-0px)"
         }
     },
     tooltip: "Zar, the Celestial of Chance",

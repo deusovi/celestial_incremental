@@ -30,49 +30,49 @@ addLayer("hk", {
             'U2': {
                 content: [["column",() => keyTable('U2')]],
                 unlocked() {
-                    keyTable('U2').length > 0
+                    return keyTable('U2').length > 0 && universes['U2'].uniShown()
                 }
             },
             'U3': {
                 content: [["column",() => keyTable('U3')]],
                 unlocked() {
-                    keyTable('U3').length > 0
+                    return keyTable('U3').length > 0 && universes['U3'].uniShown()
                 }
             },
             'A1': {
                 content: [["column",() => keyTable('A1')]],
                 unlocked() {
-                    keyTable('A1').length > 0
+                    return keyTable('A1').length > 0 && universes['A1'].uniShown()
                 }
             },
             'A2': {
                 content: [["column",() => keyTable('A2')]],
                 unlocked() {
-                    keyTable('A2').length > 0
+                    return keyTable('A2').length > 0 && universes['A2'].uniShown()
                 }
             },
             'D1': {
                 content: [["column",() => keyTable('D1')]],
                 unlocked() {
-                    keyTable('D1').length > 0
+                    return keyTable('D1').length > 0 && universes['D1'].uniShown()
                 }
             },
             'α': {
                 content: [["column",() => keyTable('UA')]],
                 unlocked() {
-                    keyTable('UA').length > 0
+                    return keyTable('UA').length > 0 && universes['UA'].uniShown()
                 }
             },
             'β': {
                 content: [["column",() => keyTable('UB')]],
                 unlocked() {
-                    keyTable('UB').length > 0
+                    return keyTable('UB').length > 0 && universes['UB'].uniShown()
                 }
             },
             'ε': {
                 content: [["column",() => keyTable('DS')]],
                 unlocked() {
-                    keyTable('DS').length > 0
+                    return keyTable('DS').length > 0 && universes['DS'].uniShown()
                 }
             },
             // 'ζ': {

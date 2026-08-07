@@ -25,7 +25,9 @@ var systemComponents = {
 			}"
 			v-bind:class="{
 				treeNode: true,
+				mediumNode: !size,
 				smallNode: size == 'small',
+				tinyNode: size == 'tiny',
 				[layer]: true,
 				tooltipBox: true,
 				ghost: tmp[layer].layerShown == 'ghost',

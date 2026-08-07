@@ -38,7 +38,7 @@ function drawTree() {
 						let layer = inner[row][thing]
 						if (tmp[layer].layerShown == true && tmp[layer].branches) {
 							for (branch in tmp[layer].branches) {
-								drawTreeBranch(layer, tmp[layer].branches[branch])
+								stupidDrawTreeBranch(layer, tmp[layer].branches[branch])
 							}
 						}
 					}
@@ -50,11 +50,16 @@ function drawTree() {
 						let layer = tree[row][thing]
 						if (tmp[layer].layerShown == true && tmp[layer].branches){
 							for (branch in tmp[layer].branches) {
-								drawTreeBranch(layer, tmp[layer].branches[branch])
+								stupidDrawTreeBranch(layer, tmp[layer].branches[branch])
 							}
 						}
 					}
 				}
+			}
+		}
+		else {
+			for(let c of tmp.maptree.mapData.connections) {
+				drawTreeBranch2(c[0],c[1],c[2])
 			}
 		}
 
@@ -74,7 +79,7 @@ function drawComponentBranches(layer, data, prefix) {
 	for(id in data) {
 		if (data[id].branches) {
 			for (branch in data[id].branches) {
-				drawTreeBranch(id, data[id].branches[branch], prefix + layer + "-")
+				stupidDrawTreeBranch(id, data[id].branches[branch], prefix + layer + "-")
 			}
 		}
 	}
@@ -103,7 +108,9 @@ function isVisibleInViewport(element) {
 	return false
 }
 
-function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimensions & adjusted slightly
+
+// why does this cram stuff in with the 'data' variable
+function stupidDrawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimensions & adjusted slightly
 	let num2 = data
 	let color_id = "#ffffff"
 	let width = 15
@@ -126,6 +133,34 @@ function drawTreeBranch(num1, data, prefix) { // taken from Antimatter Dimension
     let y1 = start.top + (start.height / 2) + document.body.scrollTop;
     let x2 = end.left + (end.width / 2) + document.body.scrollLeft;
     let y2 = end.top + (end.height / 2) + document.body.scrollTop;
+    ctx.lineWidth = width;
+    ctx.beginPath();
+    ctx.strokeStyle = color_id
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+}
+
+
+function drawTreeBranch2(id1, id2, style) { // taken from Antimatter Dimensions & adjusted slightly
+	let color_id = "#ffffff"
+	let width = 15
+
+
+	// console.log(id1,id2)
+
+	if (document.getElementById(id1) == null || document.getElementById(id2) == null) return
+	if(tmp[id2].layerShown == 'ghost') return
+
+
+
+	let start = document.getElementById(id1).getBoundingClientRect();
+    let end = document.getElementById(id2).getBoundingClientRect();
+    let x1 = start.left + (start.width / 2) + document.body.scrollLeft;
+    let y1 = start.top + (start.height / 2) + document.body.scrollTop;
+    let x2 = end.left + (end.width / 2) + document.body.scrollLeft;
+    let y2 = end.top + (end.height / 2) + document.body.scrollTop;
+
     ctx.lineWidth = width;
     ctx.beginPath();
     ctx.strokeStyle = color_id

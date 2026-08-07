@@ -6,11 +6,11 @@
 	modFiles: [
 		"layers.js", "cutscene.js", "tree.js", "mapTree.js", "Overworld/ranks.js", "Overworld/factors.js",
 		"Overworld/prestige.js", "Overworld/trees.js", "Overworld/grass.js", "Overworld/grasshop.js", "Overworld/mods.js",
-		"Overworld/pent.js", "Overworld/steelie.js", "Overworld/crystallize.js", "Overworld/timeReversal.js",
+		"Overworld/pent.js", "Overworld/steelie.js", "Overworld/crystallize.js", "Overworld/timeReversal.js", "Overworld/charger.js",
 		"Check Back/checkback.js", "portal.js", "Overworld/dice.js", "Check Back/evolution.js", "Overworld/rocketFuel.js",
 		"Infinity/infinity.js", "Infinity/antimatterDimensions.js", "Infinity/infinityPoints.js", "Overworld/pests.js",
 		"Infinity/tav.js", "Infinity/tavDomain.js", "Infinity/breakInfinity.js", "lore.js", "Infinity/otfMastery.js",
-		"Infinity/infinityDimensions.js", "Infinity/cante.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
+		"Infinity/infinityDimensions.js", "Infinity/cante.js", "Infinity/galaxyDust.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
 		"Cantepocalypse/oil.js", "Cantepocalypse/protoMemories.js", "Singularity/singularity.js", "Check Back/epicPets.js", "Overworld/pollinator.js", "factory.js",
 		"Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js", "Hall of Celestials/celestialHall.js",

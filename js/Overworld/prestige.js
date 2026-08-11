@@ -14,7 +14,6 @@
         crystals: new Decimal(0),
         crystalEffect: new Decimal(0),
         crystalsToGet: new Decimal(0),
-        crystalPause: new Decimal(0),
         crystalMax: false,
 
         doomSoftcap: new Decimal(0.5),
@@ -128,41 +127,6 @@
         if (player.p.prestigePoints.gte("1e150020")) player.p.prestigeEffect2 = player.p.prestigeEffect2.div("1e7500").pow(Decimal.add(0.1, player.cs.scraps.prestige.effect)).mul("1e7500")
         //----------------------------------------
 
-        // CRYSTAL RESET CODE
-        if (player.p.crystalPause.gt(0)) {
-            layers.p.crystalReset();
-        }
-        player.p.crystalPause = player.p.crystalPause.sub(1)
-
-        // START OF CRYSTAL MODIFIERS
-        player.p.crystalsToGet = player.r.tier.pow(0.002).mul(4)
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("id", 22))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("r", 12))
-        if (hasUpgrade("hpw", 1023)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("hpw", 1023))
-        if (!hasUpgrade("depth2", 103)) player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("oi", 22))
-        if (hasUpgrade("pol", 17)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("pol", 17))
-        if (hasUpgrade("ep1", 11)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep1", 11))
-        if (hasUpgrade("ep2", 4)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("ep2", 4))
-        if (hasUpgrade("s", 14)) player.p.crystalsToGet = player.p.crystalsToGet.mul(upgradeEffect("s", 14))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(buyableEffect("ra", 14))
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.co.cores.prestige.effect[2])
-        player.p.crystalsToGet = player.p.crystalsToGet.mul(player.i.postOTFMult)
-
-        // POWER MODIFIERS
-        if (hasUpgrade("depth2", 103)) player.p.crystalsToGet = player.p.crystalsToGet.pow(buyableEffect("oi", 22))
-
-        // CRYSTALS PER SECOND
-        player.p.crystals = player.p.crystals.add(player.p.crystalsToGet.mul(Decimal.mul(buyableEffect("fa", 202), delta)))
-
-        // CRYSTAL EFFECT
-        player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.265).mul(0.045).add(1)
-        if (hasUpgrade("cs", 303)) player.p.crystalEffect = player.p.crystals.plus(1).log(10).pow(0.3).mul(0.05).add(1)
-        if (!hasUpgrade("cs", 304)) {
-            player.p.crystalEffect = player.p.crystalEffect.min(1.5)
-        } else {
-            if (player.p.crystalEffect.gte(1.5)) player.p.crystalEffect = player.p.crystals.plus(1).log("1e100").pow(0.7).mul(0.01).add(1.41)
-            player.p.crystalEffect = player.p.crystalEffect.min(2)
-        }
     },
 
     wipeLayer() {
@@ -171,121 +135,17 @@
         player.p.prestigeEffect = new Decimal(1)
         player.p.prestigeEffect2 = new Decimal(1)
         player.p.upgrades = []
+
+        //power factors
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 19; i < 27; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+        }  
     },
     layerChildren: ["r","f"],
 
     
-    crystalReset()
-    {
-        player.pe.pests = new Decimal(0)
-        player.points = new Decimal(10)
-        player.r.rank = new Decimal(0)
-        player.r.tier = new Decimal(0)
-        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
-        player.r.ranksToGet = new Decimal(0)
-        player.r.tiersToGet = new Decimal(0)
-        player.r.tetrsToGet = new Decimal(0)
-        player.r.pentToGet = new Decimal(0)
-        player.r.pent = new Decimal(0)
-
-        player.f.factorUnlocks = [true, true, true, false, false, false, false, false]
-        player.f.factorGain = new Decimal(1)
-
-        player.f.factorPower = new Decimal(0)
-        player.f.factorPowerEffect = new Decimal(1)
-        player.f.factorPowerPerSecond = new Decimal(0)
-        player.f.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
-
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i in player.f.buyables) {
-                player.f.buyables[i] = new Decimal(0)
-            }
-        }
-
-        player.p.prestigePoints = new Decimal(0)
-
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14))
-        {
-            for (let i = 0; i < player.p.upgrades.length; i++) {
-                if (+player.p.upgrades[i] < 24) {
-                    player.p.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 19; i++) {
-                player.t.buyables[i] = new Decimal(0)
-            }
-        }
-
-        player.f.factorPower = new Decimal(0)
-
-        player.t.leaves = new Decimal(0)
-        player.t.trees = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 19; i++) {
-                player.g.buyables[i] = new Decimal(0)
-            }
-        }
-
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
-        for (let i = 0; i < player.g.upgrades.length; i++) {
-            if (+player.g.upgrades[i] < 22) {
-                player.g.upgrades.splice(i, 1);
-                i--;
-            }
-        }
-        }
-
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14)) {
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if (+player.r.milestones[i] < 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        player.g.grass = new Decimal(0)
-        player.g.grassTimer = new Decimal(0)
-
-        player.g.goldGrass = new Decimal(0)
-        player.g.goldGrassTimer = new Decimal(0)
-
-        for (let i = 1; i < 509; ) {
-            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
-
-            // Increase i value
-            if (i % 10 == 8) {
-                i = i+93
-            } else {
-                i++
-            }
-        }
-
-        player.gh.grasshoppers = new Decimal(0)
-        player.gh.fertilizer = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 20; i++) {
-                player.gh.buyables[i] = new Decimal(0)
-            }
-        }
-
-        player.m.codeExperience = new Decimal(0)
-        player.m.linesOfCode = new Decimal(0)
-        player.m.mods = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 15; i++) {
-                player.m.buyables[i] = new Decimal(0)
-            }
-        }
-    },
     clickables: {
         11: {
             title() { return "<h2>Prestige, but reset all ranks and factors.</h2><br><h3>Req: 100,000 Celestial Points</h3>" },
@@ -304,8 +164,8 @@
             canClick() { return player.p.crystalsToGet.gte(1)},
             unlocked() { return true },
             onClick() {
-                player.p.crystalPause = new Decimal(5)
                 player.p.crystals = player.p.crystals.add(player.p.crystalsToGet)
+                doReset('cr')
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}
@@ -737,31 +597,6 @@
                         ["upgrade", 21], ["upgrade", 22], ["upgrade", 23]], {maxWidth: "650px"}],
                 ]
             },
-            "Crystallize": {
-                buttonStyle() { return { color: "white", borderRadius: "5px", borderColor: "#31aeb0", backgroundColor: "#98245c"}},
-                unlocked() { return hasUpgrade("i", 24) },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.p.crystals) + "</h3> crystals."}, {color: "#b6658c", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.p.crystalsToGet) + ")"}, () => {
-                            let look = {color: "#b6658c", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            player.p.crystalsToGet.gte(1) ? look.color = "#b6658c" : look.color = "gray"
-                            return look
-                        }],
-                    ]],
-                    ["raw-html", "(Gain based on Tetr)", { color: "#b6658c", fontSize: "16px", fontFamily: "monospace" }],
-                    ["row", [
-                        ["raw-html", () => {return "Boosts ranks, tiers, tetr, and pent effect by <h3>^" + format(player.p.crystalEffect, 5) + "</h3>."}, {color: "#b6658c", fontSize: "16px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return (!hasUpgrade("cs", 304) && player.p.crystalEffect.gte(1.5)) || player.p.crystalEffect.gte(2) ? "<small style='margin-left:8px'>[HARDCAPPED]</small>" : hasUpgrade("cs", 304) && player.p.crystalEffect.gte(1.5) ? "<small style='margin-left:8px'>[SOFTCAPPED]</small>" : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
-                    ]],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 12]]],
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14],
-                        ["ex-buyable", 15], ["ex-buyable", 16], ["ex-buyable", 17], ["ex-buyable", 18]], {maxWidth: "1200px"}],
-                ]
-            },
         },
     },
 
@@ -801,21 +636,6 @@
             },
         },
 
-        {
-            key: "y", 
-            description: "Crystallize",
-
-            unlocked() {
-                return hasUpgrade("i", 24)
-            },
-            isAutomated() {
-                return hasMilestone("s", 16)
-            },
-            onPress() {
-                clickClickable(this.layer, 12)
-            },
-
-            style: { color: "white", borderColor: "#31aeb0", backgroundColor: "#98245c"}
-        },
+        
 	]
 })

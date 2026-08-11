@@ -1293,7 +1293,7 @@ function loadVue() {
 
 
 
-		Vue.component('map-tree', {
+	Vue.component('map-tree', {
 		props: ['layer', 'data', 'look'],
 		computed: {
 			key() {return this.$vnode.key},
@@ -1411,7 +1411,9 @@ function loadVue() {
 		}
 	})
 
-	
+	// Vue.component('side-node', {
+		
+	// })
 
 
 	// Updates the value in player[layer][data]

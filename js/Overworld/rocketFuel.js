@@ -169,6 +169,23 @@
             layers.rf.rocketFuelAbility(7, player.ta.highestRocketFuel)
         }
     },
+    wipeLayer() {
+        player.rf.rocketFuel = new Decimal(0)
+        player.rf.rocketFuelToGet = new Decimal(0)
+        player.rf.abilityIndex = -1
+
+        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
+            player.rf.abilitiesUnlocked[i] = false
+        }
+
+        for (let i = 0; i < 5; i++) {
+            player.rf.abilityTimers[i] = new Decimal(0)
+            player.rf.abilityEffects[i] = new Decimal(1)
+        }
+
+        player.rf.upgrades.splice(0, player.rf.upgrades.length)
+    },
+    layerChildren: ["pt","m","gh"],
     clickables: {
         2: {
             title() { return "<h3>Gain rocket fuel, but reset everything before check back, excluding milestones.<br><small>Req: 1e15 Grasshoppers</small></h3>" },

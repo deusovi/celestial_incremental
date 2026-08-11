@@ -304,6 +304,49 @@ addLayer('g', {
             }
         }
     },
+    wipeLayer() {
+
+        for (let i = 1; i < 509; ) {
+            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
+
+            // Increase i value
+            if (i % 10 == 8) {
+                i = i+93
+            } else {
+                i++
+            }
+        }
+
+        player.g.grass = new Decimal(0)
+        player.g.grassTimer = new Decimal(0)
+
+        player.g.goldGrass = new Decimal(0)
+        player.g.goldGrassTimer = new Decimal(0)
+
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.g.buyables[i] = new Decimal(0)
+            }
+        }
+
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) {
+            for (let i = 0; i < player.g.upgrades.length; i++) {
+                if (+player.g.upgrades[i] < 22) {
+                    player.g.upgrades.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        //grass factors
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 1; i < 8; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+        }  
+
+    },
+    layerChildren: ['t'],
     grid: {
         rows: 5,
         cols: 8,

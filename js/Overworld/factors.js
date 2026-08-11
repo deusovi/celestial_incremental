@@ -153,6 +153,9 @@
             for (let i = 11; i < 18; i++) {
                 player.f.buyables[i] = new Decimal(0)
             }
+            for (let i = 101; i < 104; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
         }  
         /*
         other buyables are 'owned' by other layers:
@@ -162,9 +165,6 @@
             'owned' by prestige
         28-36: tree factors
             'owned' by trees
-        
-        101-104: factored factors
-
         */
         player.f.factorPower = new Decimal(0)
     },

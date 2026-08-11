@@ -27,7 +27,6 @@
         pentReq: new Decimal(1e28),
         pentEffect: new Decimal(1),
         pentToGet: new Decimal(0),
-        pentPause: new Decimal(0),
 
         pentMilestone9Effect: [new Decimal(1), new Decimal(1)],
         pentMilestone11Effect: new Decimal(1),
@@ -159,6 +158,9 @@
     },
     
     wipeLayer() {
+        //this one should technically be in a layer above ranks but eh
+        player.points = new Decimal(0)
+
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)

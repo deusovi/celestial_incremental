@@ -1,103 +1,9 @@
 ﻿const DOMAIN_TREE = [["tac", "tco"], ["tma"], ["tex", "tst"]]
-addNode("tac", {
-    color: "#5b629a",
-    symbol: "Ac",
-    universe: "U2",
-    tooltip: "Accumulation",
-    canClick: true,
-    onClick() {
-        player.subtabs["tad"]["Domain"] = "Accumulation"
-    },
-    layerShown() {return true},
-    hotkeys: [
-        {
-            key: "a", 
-            description: "Max Accumulators",
-            onPress() {
-                clickClickable("tad", 25)
-            },
-        }
-	]
-})
-addNode("tco", {
-    color: "#094242",
-    symbol: "Co",
-    universe: "U2",
-    tooltip: "Compression",
-    branches: [["tac", "#2d314d"]],
-    canClick: true,
-    onClick() {
-        player.subtabs["tad"]["Domain"] = "Compression"
-    },
-    layerShown() {return hasUpgrade("tad", 125)},
-    hotkeys: [
-        {
-            key: "k", 
-            description: "Compress",
-            onPress() {
-                clickClickable("tad", 41)
-            },
-        }
-	]
-})
-addNode("tma", {
-    color: "#6d228b",
-    symbol: "Ma",
-    universe: "U2",
-    tooltip: "Magnification",
-    branches: [["tac", "#2d314d"]],
-    canClick: true,
-    onClick() {
-        player.subtabs["tad"]["Domain"] = "Magnification"
-    },
-    layerShown() {return hasUpgrade("tad", 145)},
-    hotkeys: [
-        {
-            key: "q", 
-            description: "Magnify",
-            onPress() {
-                clickClickable(this.layer, 31)
-            },
-        }
-	]
-})
-addNode("tst", {
-    color: "#b9bcd5",
-    symbol: "St",
-    universe: "U2",
-    tooltip: "Stabilization",
-    canClick: true,
-    onClick() {
-        player.subtabs["tad"]["Domain"] = "Stabilization"
-    },
-    layerShown() {return hasMilestone("s", 11)},
-})
-addNode("tex", {
-    color: "#ffd5b3",
-    symbol: "Ex",
-    universe: "U2",
-    tooltip: "Exponentiation",
-    branches: [["tac", "#2d314d"]],
-    canClick: true,
-    onClick() {
-        player.subtabs["tad"]["Domain"] = "Exponentiation"
-    },
-    layerShown() {return hasUpgrade("depth1", 103)},
-    hotkeys: [
-        {
-            key: "e", 
-            description: "Exponentiate",
-            onPress() {
-                clickClickable("tad", 41)
-            },
-        }
-	]
-})
+
 addLayer("tad", {
     name: "Tav's Domain", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "TD", // This appears on the layer's node. Default is the id with the first letter capitalized
     universe: "U2",
-    innerNodes: [["tac", "tco"], ["tma"], ["tex", "tst"]],
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -229,15 +135,7 @@ addLayer("tad", {
         breakNIP: false,
         hiveExpand: false,
     }},
-    automate() {
-        if (player.tad.auto) {
-            for (let i = 11; i < 45; ) {
-                buyBuyable("tad", i)
-                if (i % 10 == 4) i = i + 7
-                else i++
-            }
-        }
-    },
+    
     nodeStyle() {
         return {
             background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
@@ -2799,14 +2697,6 @@ addLayer("tad", {
     },
     microtabs: {
         Tabs: {
-            "Domain": {
-                buttonStyle() { return { color: "black", borderColor: "#7c9797", borderRadius: "5px" }},
-                unlocked() { return true },
-                content: [
-                    ["blank", "10px"],
-                    ["buttonless-microtabs", "Domain", { 'border-width': '0px' }],
-                ]
-            },
             "Infinitum": {
                 buttonStyle() { return { color: "black", borderColor: "#9194FA", borderRadius: "5px" }},
                 unlocked() { return player.tad.infinitumResets.gt(0) || hasMilestone("s", 15) },

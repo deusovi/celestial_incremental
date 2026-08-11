@@ -391,20 +391,20 @@
         }
 
         //     <----     ROCKETFUEL LAYER     ---->
-        player.rf.rocketFuel = new Decimal(0)
-        player.rf.rocketFuelToGet = new Decimal(0)
-        player.rf.abilityIndex = -1
+        // player.rf.rocketFuel = new Decimal(0)
+        // player.rf.rocketFuelToGet = new Decimal(0)
+        // player.rf.abilityIndex = -1
 
-        for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
-            player.rf.abilitiesUnlocked[i] = false
-        }
+        // for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
+        //     player.rf.abilitiesUnlocked[i] = false
+        // }
 
-        for (let i = 0; i < 5; i++) {
-            player.rf.abilityTimers[i] = new Decimal(0)
-            player.rf.abilityEffects[i] = new Decimal(1)
-        }
+        // for (let i = 0; i < 5; i++) {
+        //     player.rf.abilityTimers[i] = new Decimal(0)
+        //     player.rf.abilityEffects[i] = new Decimal(1)
+        // }
 
-        player.rf.upgrades.splice(0, player.rf.upgrades.length)
+        // player.rf.upgrades.splice(0, player.rf.upgrades.length)
 
         //     <----     U1 CHALLENGE STUFF     ---->
         player.pe.pests = new Decimal(0)

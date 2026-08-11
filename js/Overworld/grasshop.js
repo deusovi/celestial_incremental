@@ -8,7 +8,6 @@
         unlocked: true,
         grasshoppers: new Decimal(0),
         grasshoppersToGet: new Decimal(0),
-        grasshopPause: new Decimal(0),
 
         grasshopperEffects: [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1)],
 
@@ -23,7 +22,6 @@
         steelPause: new Decimal(0),
 
         studyMax: false,
-        steelMax: false,
 
         doomSoftcap: new Decimal(0.5),
         doomSoftcapStart: new Decimal("1e1000000"),
@@ -127,11 +125,6 @@
         if (hasUpgrade("rf", 14)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.div(100).mul(delta))
         if (hasMilestone("ip", 22)) player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet.div(10).mul(delta))
 
-        // GRASSHOPPER RESET CODE
-        if (player.gh.grasshopPause.gt(0)) {
-            layers.gh.grasshopReset();
-        }
-        player.gh.grasshopPause = player.gh.grasshopPause.sub(1)
 
         // GRASSHOPPER EFFECTS
         player.gh.grasshopperEffects[0] = player.gh.grasshoppers.pow(1.1).pow(1.25).add(1)
@@ -205,44 +198,6 @@
 
         //----------------------------------------
 
-        // START OF STEEL MODIFIERS
-        if (player.m.codeExperience.pow(0.08).lt("1e500")) player.gh.steelToGet = player.m.codeExperience.pow(0.08)
-        if (player.m.codeExperience.pow(0.08).gte("1e500")) player.gh.steelToGet = Decimal.mul("1e500", player.m.codeExperience.plus(10).log10().pow(10))
-        if (hasUpgrade("cs", 604)) player.gh.steelToGet = player.gh.steelToGet.pow(2)
-        if (hasUpgrade("bi", 107)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("bi", 107))
-        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("p", 14))
-        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("id", 21))
-        if (hasUpgrade("hpw", 1023)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("hpw", 1023))
-        if (!hasUpgrade("depth2", 103)) player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("oi", 21))
-        if (hasUpgrade("ep2", 9)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("ep2", 9))
-        if (hasUpgrade("s", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(upgradeEffect("s", 14))
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.foundryEffect)
-        if (player.pol.pollinatorEffects.mechanical.enabled) player.gh.steelToGet = player.gh.steelToGet.mul(player.pol.pollinatorEffects.mechanical.effects[0])
-        if (hasMilestone("fa", 14)) player.gh.steelToGet = player.gh.steelToGet.mul(player.fa.milestoneEffect[3])
-        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("s", 13))
-        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("fu", 18))
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.fu.happinessEffect2)
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.co.cores.grasshopper.effect[2])
-        player.gh.steelToGet = player.gh.steelToGet.mul(buyableEffect("st", 104))
-        player.gh.steelToGet = player.gh.steelToGet.mul(player.i.postOTFMult)
-
-        // POWER MODIFIERS
-        player.gh.steelToGet = player.gh.steelToGet.pow(player.se.starsExploreEffect[0][5])
-        player.gh.steelToGet = player.gh.steelToGet.pow(player.cof.coreFragmentEffects[2])
-        player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("laboratory", 12))
-        if (hasUpgrade("depth2", 103)) player.gh.steelToGet = player.gh.steelToGet.pow(buyableEffect("oi", 21))
-
-        // STEEL PER SECOND
-        if (hasUpgrade("sma", 103)) player.gh.steel = player.gh.steel.add(Decimal.mul(player.uni["U1"].tickspeed.div(10), player.gh.steelToGet.mul(delta)))
-
-        // STEEL EFFECT
-        player.gh.steelEffect = player.gh.steel.pow(0.75).add(1)
-
-        // STEEL RESET CODE
-        if (player.gh.steelPause.gt(0)) {
-            layers.gh.steelieReset();
-        }
-        player.gh.steelPause = player.gh.steelPause.sub(1)
 
         // SINGULARITY UPGRADE 19 PERK
         if (hasUpgrade("s", 19)) {
@@ -251,6 +206,19 @@
         }
         
     },
+    wipeLayer() {
+        player.gh.grasshoppers = new Decimal(0)
+        player.gh.grasshoppersToGet = new Decimal(0)
+        player.gh.fertilizer = new Decimal(0)
+        player.gh.fertilizerPerSecond = new Decimal(0)
+
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 1; i < 20; i++) {
+                player.gh.buyables[i] = new Decimal(0)
+            }
+        }
+    },
+    layerChildren: ["p","g"],
     branches() { return !player.zarDungeon.zarDefeated ? "g" : ["p"] },
     clickables: {
         2: {
@@ -271,24 +239,6 @@
             },
             style: { width: '80px', "min-height": '50px', borderRadius: '0px 10px 10px 0px'}
         },
-        4: {
-            title() { return "Buy Max On" },
-            canClick() { return player.gh.steelMax == false },
-            unlocked() { return true },
-            onClick() {
-                player.gh.steelMax = true
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
-        5: {
-            title() { return "Buy Max Off" },
-            canClick() { return player.gh.steelMax == true  },
-            unlocked() { return true },
-            onClick() {
-                player.gh.steelMax = false
-            },
-            style: { width: '75px', "min-height": '50px', }
-        },
         11: {
             title() { return "<h2>Grasshop, but reset everything except pent.</h2><br><h3><small>Req: 10,000 Grass and 1e35 Celestial Points</small></h3>" },
             canClick() { return player.gh.grasshoppersToGet.gte(1) && player.points.gte(1e35) },
@@ -296,8 +246,8 @@
             onClick() {
                 if (!hasAchievement("achievements", 13)) completeAchievement("achievements", 13)
                 if (!hasAchievement("achievements", 23) && player.gh.grasshoppersToGet.gte(1e25)) completeAchievement("achievements", 23)
-                player.gh.grasshopPause = new Decimal(3)
                 player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet)
+                doReset('gh')
 
                 if (!hasAchievement("achievements", 108)) {
                     player.pe.pests = player.pe.pests.mul(0.9)
@@ -1382,28 +1332,7 @@
                         ["blank", "10px"],
                     ], {width: "500px", backgroundColor: "rgba(0,0,0,0.3)", border: "3px solid #031d3b", borderRadius: "15px"}],
                 ]
-            },
-            "Steelie": {
-                buttonStyle() { return { color: "white", borderColor: "black", backgroundColor: "grey", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("i", 23) },
-                content: [
-                    ["blank", "25px"],
-                    ["row", [
-                        ["raw-html", () => {return "You have <h3>" + format(player.gh.steel) + "</h3> steel." }, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
-                        ["raw-html", () => {return "(+" + format(player.gh.steelToGet) + ")" }, () => {
-                            let look = {color: "white", fontSize: "24px", fontFamily: "monospace", marginLeft: "10px"}
-                            player.gh.steelToGet.gte(1) ? look.color = "white" : look.color = "gray"
-                            return look
-                        }],
-                    ]],
-                    ["raw-html", () => { return "Boosts grasshopper gain by x" + format(player.gh.steelEffect)}, {color: "white", fontSize: "20px", fontFamily: "monospace"}],
-                    ["blank", "25px"],
-                    ["row", [["clickable", 12]]],
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 31], ["ex-buyable", 32], ["ex-buyable", 33], ["ex-buyable", 34],
-                        ["ex-buyable", 35], ["ex-buyable", 36], ["ex-buyable", 37], ["ex-buyable", 38]], {maxWidth: "1200px"}],
-                ]
-            },
+            }
         },
     },
 

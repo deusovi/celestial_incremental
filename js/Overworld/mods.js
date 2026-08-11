@@ -9,7 +9,6 @@
 
         codeExperience: new Decimal(0),
         codeExperienceToGet: new Decimal(0),
-        codeExperiencePause: new Decimal(0),
         codeExperienceEffect: new Decimal(1),
 
         linesOfCode: new Decimal(0),
@@ -97,11 +96,6 @@
         // CODE EXPERIENCE PER SECOND
         if (hasMilestone("ip", 22)) player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet.mul(Decimal.mul(delta, 0.1)))
 
-        // CODE EXPERIENCE RESET CODE
-        if (player.m.codeExperiencePause.gt(0)) {
-            layers.m.codeExperienceReset();
-        }
-        player.m.codeExperiencePause = player.m.codeExperiencePause.sub(1)
 
         // CODE EXPERIENCE EFFECT
         player.m.codeExperienceEffect = player.m.codeExperience.add(1).log(1e100).add(1).pow(2)
@@ -206,6 +200,23 @@
             player.m.linesOfCode = new Decimal(0)
         }
     },
+    wipeLayer() {
+        player.m.codeExperience = new Decimal(0)
+        player.m.codeExperienceToGet = new Decimal(0)
+        player.m.linesOfCode = new Decimal(0)
+        player.m.linesOfCodePerSecond = new Decimal(0)
+        player.m.mods = new Decimal(0)
+        player.m.modsToGet = new Decimal(0)
+
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 15; i++) {
+                player.m.buyables[i] = new Decimal(0)
+            }
+        }
+
+    },
+    layerChildren: ['p','g'],
+
     clickables: {
         2: {
             title() { return "Buy Max On" },
@@ -231,91 +242,13 @@
             unlocked() { return true },
             onClick() {
                 if (!hasAchievement("achievements", 17)) completeAchievement("achievements", 17)
-                player.m.codeExperiencePause = new Decimal(3)
                 player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
+                doReset('m')
             },
             style: { width: '400px', minHeight: '100px', borderRadius: '15px' },
         },
     },
-    codeExperienceReset() {
-        player.points = new Decimal(0)
-        player.r.rank = new Decimal(0)
-        player.r.tier = new Decimal(0)
-        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
-        player.r.ranksToGet = new Decimal(0)
-        player.r.tiersToGet = new Decimal(0)
-        player.r.tetrsToGet = new Decimal(0)
-        player.r.pentToGet = new Decimal(0)
-
-        player.r.factorUnlocks = [true, true, true, false, false, false, false, false]
-        player.r.factorGain = new Decimal(1)
-
-        player.r.factorPower = new Decimal(0)
-        player.r.factorPowerEffect = new Decimal(1)
-        player.r.factorPowerPerSecond = new Decimal(0)
-        player.r.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 19; i++) {
-                player.f.buyables[i] = new Decimal(0)
-            }
-            for (let i = 21; i < 28; i++) {
-                player.f.buyables[i] = new Decimal(0)
-            }
-        }
-
-        player.p.prestigePoints = new Decimal(0)
-
-        if (!hasMilestone("ip", 11)) {
-            for (let i = 0; i < player.p.upgrades.length; i++) {
-                if (+player.p.upgrades[i] < 24) {
-                    player.p.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 19; i++) {
-                player.t.buyables[i] = new Decimal(0)
-            }
-        }
-
-        player.f.factorPower = new Decimal(0)
-
-        player.t.leaves = new Decimal(0)
-        player.t.trees = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 19; i++) {
-                player.g.buyables[i] = new Decimal(0)
-            }
-        }
-
-        if (!hasMilestone("ip", 11)) {
-            for (let i = 0; i < player.g.upgrades.length; i++) {
-                if (+player.g.upgrades[i] < 17) {
-                    player.g.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-        player.g.grass = new Decimal(0)
-        player.g.grassTimer = new Decimal(0)
-
-        player.g.goldGrass = new Decimal(0)
-        player.g.goldGrassTimer = new Decimal(0)
-
-        for (let i = 1; i < 509; ) {
-            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
-
-            // Increase i value
-            if (i % 10 == 8) {
-                i = i+93
-            } else {
-                i++
-            }
-        }
-    },
+    
     bars: {
         modbar: {
             unlocked: true,
@@ -664,17 +597,3 @@
         }
 	]
 })
-/*        codeExperience: new Decimal(0),
-        codeExperienceToGet: new Decimal(0),
-        codeExperiencePause: new Decimal(0),
-
-        linesOfCode: new Decimal(0),
-        linesOfCodePerSecond: new Decimal(0),
-
-        mods: new Decimal(0),
-        modsEffect: new Decimal(1),
-        modsToGet: new Decimal(1),
-        modsReq: new Decimal(100),
-
-        modSoftcap: new Decimal(1),
-        modSoftcapStart: new Decimal(10),*/

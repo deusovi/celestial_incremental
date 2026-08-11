@@ -159,6 +159,23 @@
             player.t.leaves = new Decimal(0)
         }
     },
+    wipeLayer() {
+        player.t.leaves = new Decimal(0)
+        player.t.trees = new Decimal(0)
+
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 11; i < 19; i++) {
+                player.t.buyables[i] = new Decimal(0)
+            }
+        }
+
+        if (!hasMilestone("ip", 26)) {
+            for (let i = 28; i < 36; i++) {
+                player.f.buyables[i] = new Decimal(0)
+            }
+        }  
+    },
+    layerChildren: [],
     clickables: {},
     bars: {
         treebar: {

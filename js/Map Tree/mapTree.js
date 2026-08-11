@@ -17,25 +17,41 @@ mapUniverses = {
         ux: 0,
         uy: 0,
         tree: [
+            ['minicp'],
             ['r','f','t'],
             ['p','blank','g'],
             ['pt','m','gh'],
-            ['U1sep'],
-            ['d','rf','cr','ste'],
-            ['i','pyA','tr']
+            ['minipol','_preOTF','minicha'],
+            // ['cr','d','rf','ste'],
+            
+            // ['rf','i','d','_preOTF2'],
+            
+            ['d','i','rf'],
+            // ['i','pyA','blank'],
+            // ['rf','i','d','_preOTF2'],
         ],
     },
     'U2': {
         universe: 'U2',
         ux: 0,
         uy: 1,
+        // tree: [
+        //     ['minipol','ad','minicha'],
+        //     ['ip','ta'],
+        //     ['pol','bi','cha'],
+        //     ['om','pyP','ca'],
+        //     ['id','_U2','gd'],
+        //     [],
+        // ]
         tree: [
-            ['minipol','ad','minicha'],
-            ['ip','ta'],
-            ['pol','bi','cha'],
-            ['om','pyP','ca'],
-            ['id','U2sep','gd'],
-            [],
+            ['ad','blank','_CrSt',],
+            ['ta','ip','cr','ste'],
+            ['bi','pyP','tr'],
+            
+            ['om','ca','pol','cha'],
+            // ['id','gd'],
+            ['_U2L','blank','_U2R'],
+            [],            
         ]
     },
     'U3': {
@@ -126,7 +142,7 @@ mapUniverses = {
             [],
             [],
             [],
-            []
+            ["lb"]
         ],
     },
     'TD': {
@@ -134,12 +150,12 @@ mapUniverses = {
         ux: 1,
         uy: 0,
         tree: [
+            ["tm"],
             ["tac"],
             ["tco"],
             ["tma"],
-            ["tex"],
             [],
-            ["tad"]
+            ["tad","tex"]
         ]
     },
     'A2': {
@@ -192,17 +208,23 @@ mapBridgeNodes = [
         }
     },
     {
-        universes: ['U2','UA'],
-        row: 0,
+        universes: ['CB','UA'],
         shown() {
             return true
-        },
-        id0: 'hex_bridge_A',
-        id1: 'hex_bridge_B'
+        }
     },
+    // {
+    //     universes: ['U2','UA'],
+    //     row: 0,
+    //     shown() {
+    //         return true
+    //     },
+    //     id0: 'hex_bridge_A',
+    //     id1: 'hex_bridge_B'
+    // },
     {
         universes: ['U2','UA'],
-        row: 4,
+        row: 5,
         shown() {
             return true
         },
@@ -216,7 +238,7 @@ mapBridgeNodes = [
     },
     {
         universes: ['U2','A1'],
-        row: 4, 
+        row: 5, 
         shown() {
             return true
         },
@@ -249,6 +271,9 @@ mapBridgeNodes = [
 mapConnections = [
 
     // U1
+    ['r','minicp'],
+    ['f','minicp'],
+    ['t','minicp'],
     ['p','r'],
     ['p','f'],
     ['g','t'],
@@ -258,32 +283,55 @@ mapConnections = [
     ['gh','g'],
     ['m','p'],
     ['m','g'],
-    ['U1sep','pt'],
-    ['U1sep','m'],
-    ['U1sep','gh'],
+    ['_preOTF','pt'],
+    ['_preOTF','m'],
+    ['_preOTF','gh'],
 
-    ['d','U1sep'],
-    ['rf','U1sep'],
-    ['cr','U1sep'],
-    ['ste','U1sep'],
-    // ['ste','cha'], // this connection should really be here but there's no good way to put it in
+    ['d','_preOTF'],
+    ['rf','_preOTF'],
+    ['cr','_CrSt'],
+    ['ste','_CrSt'],
     
+    {
+        connections: [
+            ['pol','minipol'],
+            ['cha','minicha'],
+        ],
+        style: {gradient: 'grayFadeout'}
+    },
     // infinity
     {
         connections: [
-            ['i','d'],
-            ['i','rf'],
-            ['ip','minipol'],
-            // ['ip','U2_to_U1'],
-            // ['U1_to_U2','i'],
-            ['ip','i'],
-            ['ip','minicha']
+            // ['i','d'],
+            // ['i','rf'],
+            // ['ip','_inf'],['_inf','i'],
+            // ['i','U2_to_U1'], ['U1_to_U2','_preOTF'],
+            ['ip','U2_to_U1'],
+            ['U2_to_U1','d'],
+            ['U2_to_U1','rf'],
+            ['U2_to_U1','i'],
+            ['i','_preOTF'],
+            ['i','minipol'],
+            ['i','minicha']
         ],
         shown() {return tmp.ip.layerShown},
         style: {color: '#FFCC88'}
     },
-    ['i','hex_bridge_A'],
+    {
+        connections: [
+            ['i','CB_to_UA'], //
+        ],
+        shown() {return !hasUpgrade('s',18)},
+    },
 
+    {
+        connections: [
+            ["_CrSt", "_preOTF"],
+            ['ste','minicha'],
+        ],
+        shown() {return tmp.s.layerShown},
+        style: {gradient: 'fadeout'}
+    },
 
 
     //hex
@@ -303,23 +351,31 @@ mapConnections = [
 
     ['bi','ip'],
     ['bi','ta'],
-    ['gd','ca'],
 
-    ['pol','minipol'],
-    ['cha','minicha'],
+    // ['pol','minipol'],
+    // ['cha','minicha'],
 
-    //aesthetic lines
-    // {
-    //     connections: [
-    //         ["ta","tr"],
-    //         ["ta","pol"],
-    //     ],
-    //     style: {'background-color': '#666666', 'z-index': -20}
 
-    // },
+
     
     //TD
-    ['tad','tac'],
+    ['tex','tma'],
+    ['tma','tco'],
+    ['tco','tac'],
+    ['tac','tm'],
+    {
+        connections: [
+            ['tad','tac'], //
+        ],
+        shown() {return !tmp.tco.layerShown},
+    },
+    {  
+        connections: [
+            ['tad','tco'], //
+        ],
+        shown() {return !tmp.tma.layerShown},
+    },
+    ["tad","tma"],
 
     // A1
     ["an","ar"],
@@ -337,20 +393,30 @@ mapConnections = [
     ["fu","cp"],
     ["en","fu"],
 
-    //sing resets
+    // singularity
     {
         connections: [
             ["s","U3_to_U2"],
             ["U2_to_U3", "U2_to_UA"],["UA_to_U2", "hpw"],
-            ["U2_to_U3", "id"],["id","om"],
-            ["U2_to_U3", "U2sep"],
-            ["U2sep","bi"],
-            // ["U2sep","ip"],
-            // ["U2sep","ta"],
-            ["U2sep","pol"],
-            ["U2sep","cha"],
+            // ["U2_to_U3", "hpw"],
+
+            ["U2_to_U3","_U2L"],
+                ["_U2L","om"],
+                ["_U2L","bi"],
+                ["_U2L","ca"],
+            ["U2_to_U3","_U2R"],
+                ["_U2R","pol"],
+                ["_U2R","tr"],
+                ["_U2R","cha"],
+            // ["U2_to_U3", "id"],["id","om"],
+            // ["U2_to_U3", "bi"],
+            // ["_U2","ip"],
+            // ["_U2","ta"],
+            // ["U2_to_A1","cha"],
+            // ["U2_to_A1","ste"],
             ['tr','cr'], ['tr','ste'],
             ["U2_to_U3", "U2_to_A1"], ["A1_to_U2", "cp"],
+            // ["U2_to_U3", "cp"],
             ["U2_to_U3", "gd"],
             
         ],
@@ -361,7 +427,7 @@ mapConnections = [
         connections: [
             ["U2_to_U3", "tad"],
             ["U2_to_U3", "cb"],
-            ["U2sep", "tr"], 
+            ["_U2", "tr"], 
 
         ],
         shown() {return tmp.s.layerShown},
@@ -429,57 +495,28 @@ let gradientStyles = {
             {offset: 0.8, color: 'transparent'},
             {offset: 0.9, color: '#FF8888'},
         ]
-    }
+    },
+    grayFadeout: {
+        id: 'grayFadeout',
+        stops: [
+            {offset: 0.2, color: '#222222'},
+            {offset: 0.3, color: 'transparent'},
+            {offset: 0.8, color: 'transparent'},
+            {offset: 0.9, color: '#222222'},
+        ]
+    },
+    fadeout: {
+        id: 'fadeout',
+        stops: [
+            {offset: 0.2, color: '#ffffff'},
+            {offset: 0.3, color: '#ffffff33'},
+            {offset: 0.8, color: '#ffffff33'},
+            {offset: 0.9, color: '#ffffff'},
+        ]
+    },
 }
 
 
-addNode('U1sep', {
-    name: "U1sep", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "U1",
-    nodeStyle() {
-        return { color: '#FFFFFF', 'background-color': '#FFFFFF', 'border-color': "#FFFFFF", 'scale': '50%'}
-    },
-    tooltip() {return ""},
-    layerShown() { return player.startedGame == true && (player.po.dice == true || inChallenge("ip", 15))},
-
-})
-
-addNode('U2sep', {
-    name: "U2sep", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "U2",
-    nodeStyle() {
-        return { color: '#FF8888', 'background-color': '#FF8888', 'border-color': "#FF8888", 'scale': '50%'}
-    },
-    tooltip() {return ""},
-    layerShown() { return player.startedGame == true && (player.po.dice == true || inChallenge("ip", 15))},
-})
-
-addNode('minipol', {
-    name: "Pollinators", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "🐝", // This appears on the layer's node. Default is the id with the first letter capitalized
-    size: 'tiny',
-
-    universe: "U2",
-    nodeStyle() {
-        return { color: "#cb8e00", 'background-color': '#cb8e00'}
-    },
-    tooltip() {return ""},
-    layerShown() { return player.startedGame == true && (player.po.dice == true || inChallenge("ip", 15))},
-})
-
-addNode('minicha', {
-    name: "Charger", // This is optional, only used in a few places, If absent it just uses the layer id.
-    symbol: "⚡", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "U2",
-    nodeStyle() {
-        return { color: "#f7f774", borderColor: "gray", backgroundColor: "#222222"}
-    },
-    size: 'tiny',
-    // tooltip() {return ""},
-    layerShown() { return true},
-})
 
 
 
@@ -531,6 +568,10 @@ addLayer('maptree', {
                     let layerID = mapUniverses[uni].tree[rowNum][layerNum]
                     if(layerID == 'blank') {
                         shownLayerNum++
+                        continue
+                    }
+                    if(!tmp[layerID]) {
+                        console.log('ERROR: layer ID [' + layerID + ']')
                         continue
                     }
 
@@ -694,6 +735,7 @@ addLayer('maptree', {
 
 
         // set scroll position
+        //there might be a better place/way to handle this
         if(options.menuType == 'Map') {
             let c = document.getElementById('mapTree')
             if(c) {

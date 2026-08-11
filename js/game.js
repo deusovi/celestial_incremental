@@ -174,6 +174,7 @@ function generatePoints(layer, diff) {
 // uses wipeLayer and layerChildren
 function doReset(layer) {
 
+	console.log('doReset',layer)
 	if (layers[layer].onPrestige) {
 		updateMilestones(layer)
 		run(layers[layer].onPrestige, layers[layer], gain)

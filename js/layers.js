@@ -739,7 +739,12 @@
         ["bar", "infbar"],
         ["style-row", [
             ["style-row", [
-                ["raw-html", () => {return "<h3>Pre-OTF Mult</h3><br>x" + format(player.i.preOTFMult)}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                [
+                    "style-column", [
+                        ["raw-html", () => {return "<h3>Pre-OTF Mult</h3><br>x" + format(player.i.preOTFMult)}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],
+                        ["raw-html","hi"]
+                    ]
+                ],
             ], {width: "250px"}],
             ["style-row", [
                 ["raw-html", () => {return "<h3>Post-OTF Mult</h3><br>x" + format(player.i.postOTFMult)}, {color: "var(--textColor)", fontSize: "20px", fontFamily: "monospace"}],

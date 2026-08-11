@@ -28,10 +28,6 @@ addLayer("pt", {
         if (player.r.pent.gte(30)) player.r.pentReq = Decimal.pow(1e10, player.r.pent)
         player.r.pentReq = player.r.pentReq.div(pentDiv)
 
-        if (player.r.pentPause.gt(0)) {
-            layers.r.pentReset();
-        }
-        player.r.pentPause = player.r.pentPause.sub(1)
 
         player.r.pentToGet = new Decimal(1)
         if (hasUpgrade("i", 32) && !inChallenge("ip", 14)) {
@@ -67,7 +63,15 @@ addLayer("pt", {
         }
     },
     wipeLayer() {
-        
+        player.r.pent = new Decimal(0)
+        if (!hasMilestone("s", 25)) {
+            for (let i = 0; i < player.r.milestones.length; i++) {
+                if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
+                    player.r.milestones.splice(i, 1);
+                    i--;
+                }
+            }
+        }
     },
     layerChildren: ['p','t'],
     tabFormat:[
@@ -117,51 +121,6 @@ addLayer("pt", {
             ]
         ]
     ],
-    pentReset() {
-        player.points = new Decimal(0)
-        player.r.rank = new Decimal(0)
-        player.r.tier = new Decimal(0)
-        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
-        player.r.ranksToGet = new Decimal(0)
-        player.r.tiersToGet = new Decimal(0)
-        player.r.tetrsToGet = new Decimal(0)
-        player.r.pentToGet = new Decimal(0)
-
-        player.r.factorUnlocks = [true, true, true, false, false, false, false, false]
-        player.r.factorGain = new Decimal(1)
-
-        player.r.factorPower = new Decimal(0)
-        player.r.factorPowerEffect = new Decimal(1)
-        player.r.factorPowerPerSecond = new Decimal(0)
-        player.r.powerFactorUnlocks = [true, true, true, false, false, false, false, false]
-
-        for (let i = 11; i < 20; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-        for (let i = 21; i < 28; i++) {
-            player.f.buyables[i] = new Decimal(0)
-        }
-
-        if (!hasMilestone("ip", 11))
-        {
-            player.p.prestigePoints = new Decimal(0)
-            for (let i = 0; i < player.p.upgrades.length; i++) {
-                if (+player.p.upgrades[i] < 23) {
-                    player.p.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        for (let i = 11; i < 17; i++) {
-            player.t.buyables[i] = new Decimal(0)
-        }
-
-        player.f.factorPower = new Decimal(0)
-
-        player.t.leaves = new Decimal(0)
-        player.t.trees = new Decimal(0)
-    },
     layerShown() { return player.startedGame == true && hasUpgrade("i", 18)},
     hotkeys: [
         {

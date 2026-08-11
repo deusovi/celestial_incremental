@@ -4,16 +4,17 @@
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: [
-		"layers.js", "cutscene.js", "tree.js", "mapTree.js", "Overworld/ranks.js", "Overworld/factors.js",
+		"layers.js", "cutscene.js", "tree.js", "Map Tree/mapTree.js", "Map Tree/extraNodes.js", "Overworld/ranks.js", "Overworld/factors.js",
 		"Overworld/prestige.js", "Overworld/trees.js", "Overworld/grass.js", "Overworld/grasshop.js", "Overworld/mods.js",
 		"Overworld/pent.js", "Overworld/steelie.js", "Overworld/crystallize.js", "Overworld/timeReversal.js", "Overworld/charger.js",
 		"Check Back/checkback.js", "portal.js", "Overworld/dice.js", "Check Back/evolution.js", "Overworld/rocketFuel.js",
 		"Infinity/infinity.js", "Infinity/antimatterDimensions.js", "Infinity/infinityPoints.js", "Overworld/pests.js",
 		"Infinity/tav.js", "Infinity/tavDomain.js", "Infinity/breakInfinity.js", "lore.js", "Infinity/otfMastery.js",
+		"Tav's Domain/tavDomain.js","Tav's Domain/accumulation.js","Tav's Domain/compression.js","Tav's Domain/magnification.js","Tav's Domain/exponentiation.js","Tav's Domain/stabilisation.js","Tav's Domain/matter.js",
 		"Infinity/infinityDimensions.js", "Infinity/cante.js", "Infinity/galaxyDust.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
 		"Cantepocalypse/oil.js", "Cantepocalypse/protoMemories.js", "Singularity/singularity.js", "Check Back/epicPets.js", "Overworld/pollinator.js", "factory.js",
-		"Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js", "Hall of Celestials/celestialHall.js",
+		"Singularity/radiation.js", "Singularity/singularityDimensions.js", "Cantepocalypse/funify.js", "Singularity/coreScraps.js", "Hall of Celestials/celestialHall.js", "Hall of Celestials/celestialLibrary.js",
 		"Misc/settings.js", "Misc/savebank.js", "Misc/changelog.js", "Misc/jukebox.js", "Misc/hotkeys.js", "Check Back/pet.js",
 		"Singularity/starmetalAlloy.js", "DarkU1/darkU1.js", "DarkU1/lightExtractor.js", "DarkU1/darkRanks.js", "DarkU1/darkPrestige.js",
 		"DarkU1/boosters.js", "DarkU1/vaporizer.js", "DarkU1/generators.js", "DarkU1/darkGrass.js", "DarkU1/normality.js",
@@ -1830,7 +1831,7 @@ let winText = `Congratulations! You have completed the entirety of Celestial Inc
 var doNotCallTheseFunctionsEveryTick = [
 	"blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset",
 	"tierReset", "tetrReset", "prestigeReset",
-	"pentReset", "grasshopReset", "codeExperienceReset",
+	"pentReset", "grasshopReset",
 	"levelToXP", "xpToLevel", "levelup", "petButton1", "petButton2",
 	"resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
 	"rocketFuelAbility", "petButton3","bigCrunch", "startCutscene4", "startCutscene5",
@@ -1840,7 +1841,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"startCutscene13", "startCutscene14", "negativeInfinityReset", "reverseCrunch",
 	"startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities",
 	"domainReset", "gainAutomationShard", "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet",
-	"sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset", "crystalReset",
+	"sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset",
 	"replicantiMultiply", "gainCanteCore", "replicantiPointMultiply", "repliLeavesMultiply", "updateSoftcap",
 	"grassSkipReset", "oilReset", "convertRememberanceCore", "startCutsceneDice",
 	"startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene",
@@ -1860,7 +1861,7 @@ var doNotCallTheseFunctionsEveryTick = [
 	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation",
 	"diamondDustReset",
 	"openChest",
-	"checkAchs", "wipeLayer",
+	"checkAchs", "wipeLayer","doReset",
 ]
 
 function getStartPoints(){

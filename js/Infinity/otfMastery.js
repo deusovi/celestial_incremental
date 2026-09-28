@@ -35,6 +35,7 @@
             background: "linear-gradient(45deg, #8a00a9, #0061ff)",
             backgroundOrigin: "border-box",
             borderColor: "purple",
+            color: "white",
         };
     },
     tooltip: "Otherworldy Feature Synergizer",
@@ -82,6 +83,11 @@
             player.om.diceMasteryPointsEffect = player.om.diceMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
             player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
             player.om.hexMasteryPointsEffect = player.om.hexMasteryPointsEffect.pow(upgradeEffect("hpw", 1053))
+        }
+        if (player.ep1.dragonEvolutionIndex >= 6) {
+            player.om.diceMasteryPointsEffect = player.om.diceMasteryPointsEffect.pow(1.1)
+            player.om.rocketFuelMasteryPointsEffect = player.om.rocketFuelMasteryPointsEffect.pow(1.1)
+            player.om.hexMasteryPointsEffect = player.om.hexMasteryPointsEffect.pow(1.1)
         }
 
         if (hasUpgrade("s", 12)) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(Decimal.mul(player.om.diceMasteryPointsToGet.mul(delta), 0.04))

@@ -247,7 +247,7 @@
                 if (!hasAchievement("achievements", 13)) completeAchievement("achievements", 13)
                 if (!hasAchievement("achievements", 23) && player.gh.grasshoppersToGet.gte(1e25)) completeAchievement("achievements", 23)
                 player.gh.grasshoppers = player.gh.grasshoppers.add(player.gh.grasshoppersToGet)
-                doReset('gh')
+                queueReset('gh')
 
                 if (!hasAchievement("achievements", 108)) {
                     player.pe.pests = player.pe.pests.mul(0.9)
@@ -1350,7 +1350,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
         ],
-    layerShown() { return player.startedGame == true && hasMilestone("r", 12) },
+    layerShown() { return (player.startedGame == true && hasMilestone("r", 12)) ? true : 'ghost' },
     hotkeys: [
         {
             key: "h", 
@@ -1358,18 +1358,6 @@
             onPress() {
                 clickClickable(this.layer, 11)
             },
-        },
-        {
-            key: "s", 
-            description: "Steelie",
-            unlocked() {
-                return hasUpgrade("i", 23)
-            },
-            onPress() {
-                clickClickable(this.layer, 12)
-            },
-
-            style: { color: "white", borderColor: "black", backgroundColor: "grey"}
         },
 	]
 

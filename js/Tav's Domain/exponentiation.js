@@ -1,7 +1,7 @@
 addLayer("tex", {
     color: "#ffd5b3",
     symbol: "Ex",
-    universe: "U2",
+    universe: "TD",
     tooltip: "Exponentiation",
 
 

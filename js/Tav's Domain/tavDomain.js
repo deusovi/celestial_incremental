@@ -3,7 +3,7 @@
 addLayer("tad", {
     name: "Tav's Domain", // This is optional, only used in a few places, If absent it just uses the layer id.
     symbol: "TD", // This appears on the layer's node. Default is the id with the first letter capitalized
-    universe: "U2",
+    universe: "TD",
     row: 1,
     position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
     startData() { return {
@@ -268,13 +268,11 @@ addLayer("tad", {
             if (player.tad.altInfinities.distorted.milestone.lt(3)) {
                 player.subtabs["tad"]["Domain"] = "Collapse"
             } else {
-                player.tad.matter = new Decimal(0)
-                player.tad.matterGain = new Decimal(0)
                 player.tad.infinitum = player.tad.infinitum.add(player.tad.infinitumGain)
                 player.tad.infinitumResets = player.tad.infinitumResets.add(1)
                 if (player.tad.domainCap.gte(player.tad.highestCap)) player.tad.highestCap = player.tad.domainCap
 
-                layers.tad.domainReset(10)
+                queueReset('tad')
             }
         }
 
@@ -507,10 +505,7 @@ addLayer("tad", {
                 player.tad.infinitum = player.tad.infinitum.add(player.tad.infinitumGain)
                 player.tad.infinitumResets = player.tad.infinitumResets.add(1)
                 if (player.tad.domainCap.gte(player.tad.highestCap)) player.tad.highestCap = player.tad.domainCap
-                player.subtabs["tad"]["Domain"] = "Tree"
-                player.subtabs["tad"]["Tabs"] = "Infinitum"
-
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style: {width: "300px", minHeight: "120px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"},
         },
@@ -521,7 +516,7 @@ addLayer("tad", {
             tooltip() {return !this.canClick() ? "Cap can't go below 1e5" : ""},
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(10).floor()
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -537,7 +532,7 @@ addLayer("tad", {
             tooltip() {return !this.canClick() ? "Cap can't go below 1e5" : ""},
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(1e5).floor()
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -553,7 +548,7 @@ addLayer("tad", {
             tooltip() {return !this.canClick() ? "Cap can't go below 1e5" : ""},
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.div(1e25).floor()
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -578,7 +573,7 @@ addLayer("tad", {
             },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(10).floor()
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -603,7 +598,7 @@ addLayer("tad", {
             },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e5).floor()
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -628,7 +623,7 @@ addLayer("tad", {
             },
             onClick() {
                 player.tad.domainCap = player.tad.domainCap.mul(1e25).floor()
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style() {
                 let look = {width: "60px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -643,7 +638,7 @@ addLayer("tad", {
             unlocked: true,
             onClick() {
                 player.tad.domainCap = new Decimal(1e5)
-                layers.tad.domainReset(10)
+                queueReset('tad')
             },
             style() {
                 let look = {width: "122px", minHeight: "50px", textShadow: "1px 1px 0 black, -1px 1px 0 black, -1px -1px 0 black, 1px -1px 0 black", borderWidth: "0", borderRadius: "0"}
@@ -663,7 +658,7 @@ addLayer("tad", {
                 player.tad.compression = player.tad.compression.add(player.tad.compressionGain)
                 player.tad.compressionTotal = player.tad.compressionTotal.add(player.tad.compressionGain)
                 // RESET
-                layers.tad.domainReset(2)
+                queueReset('tco')
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -680,9 +675,7 @@ addLayer("tad", {
                 for (let i = 101; i < 105; i++) {
                     player.tad.buyables[i] = new Decimal(0)
                 }
-
-                // RESET
-                layers.tad.domainReset(2)
+                queueReset('tco')
             },
             style() {
                 let look = {width: "250px", minHeight: "40px", lineHeight: "0.9", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"}
@@ -793,8 +786,7 @@ addLayer("tad", {
             unlocked: true,
             onClick() {
                 player.tad.magnification = player.tad.magnification.add(player.tad.magnificationGain)
-                // RESET
-                layers.tad.domainReset(3)
+                queueReset('tma')
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
@@ -810,8 +802,7 @@ addLayer("tad", {
             unlocked: true,
             onClick() {
                 player.tad.exponentiate = player.tad.exponentiate.add(1)
-                // RESET
-                layers.tad.domainReset(4)
+                queueReset('tex')
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "15px"}
@@ -2656,44 +2647,6 @@ addLayer("tad", {
                 ["tad", "auto"], // Each toggle is defined by a layer and the data toggled for that layer
             ],
         },
-    },
-    domainReset(tier = 0) {
-        // MATTER
-        if (tier > 0) {
-            player.tad.matter = new Decimal(1)
-            player.tad.matterGain = new Decimal(0)
-        }
-
-        // ACCUMULATORS
-        if (tier > 1) {
-            for (let i = 11; i < 45; ) {
-                player.tad.buyables[i] = new Decimal(0)
-                if (i % 10 == 4) {i = i+7} else {i++}
-            }
-        }
-
-        // COMPRESSIONS
-        if (tier > 2) {
-            player.tad.compression = player.tad.compressionKept
-            player.tad.compressionTotal = player.tad.compressionKept
-            player.tad.compressionGain = new Decimal(0)
-
-            for (let i = 101; i < 105; i++) {
-                player.tad.buyables[i] = new Decimal(0)
-            }
-        }
-
-        // MAGNIFICATIONS
-        if (tier > 3 && !hasMilestone("tad", 6)) {
-            player.tad.magnification = new Decimal(0)
-            player.tad.magnificationGain = new Decimal(0)
-            for (let i = 0; i < player.tad.milestones.length; i++) {
-                if (+player.tad.milestones[i] < 10) {
-                    player.tad.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
     },
     microtabs: {
         Tabs: {

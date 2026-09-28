@@ -12,6 +12,8 @@
         hexRuns: new Decimal(0),
 
         challenge7StartEvoShards: new Decimal(0),
+
+        crunchMode: "BIG CRUNCH"
     }
     },
     automate() {
@@ -55,84 +57,143 @@
     update(delta) {
         let onepersec = new Decimal(1)
 
-                        // Autocrunch Functionality
-                        if (player.in.infinityPointsToGet.gte(player.bi.IACamount) && player.bi.IACtoggle && !player.bi.IACtype && player.points.gte(1e308)) {
-                            if (inChallenge("tad", 11)) {
-                                if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
-                                    player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
-                                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
-                                }
-                                if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
-                                    player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
-                                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
-                                }
-                                if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
-                                    player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
-                                    player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
-                                }
-                            }
-                            if (hasUpgrade("bi", 14)) {
-                                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-                                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-                                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-                            }
-                            if (!hasMilestone("ip", 21)) {
-                                player.tab = "bigc"
-                            } else {
-                                layers.bigc.crunch()
-                            }
-                        }
-                
-                        if (player.bi.IACtoggle && player.bi.IACtype) {
-                            player.bi.IACtime = player.bi.IACtime.add(onepersec.mul(delta));
-                            if (player.bi.IACtime.gte(player.bi.IACamount) && player.points.gte(1e308)) {
-                                player.bi.IACtime = new Decimal(0)
-                                if (inChallenge("tad", 11)) {
-                                    if (player.bi.brokenInfinities.gt(player.tad.shatteredInfinitiesToGet) && player.po.hex && !player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(0)) {
-                                        player.tad.shatteredInfinities = player.tad.shatteredInfinities.add(player.tad.shatteredInfinitiesToGet)
-                                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.shatteredInfinitiesToGet)
-                                    }
-                                    if (player.bi.brokenInfinities.gt(player.tad.disfiguredInfinitiesToGet) && !player.po.hex && !player.po.dice && player.po.rocketFuel && player.tad.currentConversion.eq(1)) {
-                                        player.tad.disfiguredInfinities = player.tad.disfiguredInfinities.add(player.tad.disfiguredInfinitiesToGet)
-                                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.disfiguredInfinitiesToGet)
-                                    }
-                                    if (player.bi.brokenInfinities.gt(player.tad.corruptedInfinitiesToGet) && !player.po.hex && player.po.dice && !player.po.rocketFuel && player.tad.currentConversion.eq(2)) {
-                                        player.tad.corruptedInfinities = player.tad.corruptedInfinities.add(player.tad.corruptedInfinitiesToGet)
-                                        player.bi.brokenInfinities = player.bi.brokenInfinities.sub(player.tad.corruptedInfinitiesToGet)
-                                    }
-                                }
-                                if (hasUpgrade("bi", 14)) {
-                                        if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-                                        if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-                                        if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-                                }
-                                if (!hasMilestone("ip", 21)) {
-                                    player.tab = "bigc"
-                                } else {
-                                    layers.bigc.crunch()
-                                }
-                            }
-                        }
+        // Autocrunch Functionality
+        if (player.in.infinityPointsToGet.gte(player.bi.IACamount) && player.bi.IACtoggle && !player.bi.IACtype && player.points.gte(1e308)) {
+            if (player.ip.crunchMode == "BIG CRUNCH") {
+                player.tab = "bigc"
+            } else {
+                queueReset("ip")
+            }
+        }
 
-                        // Check for achievements
-                        if (!hasAchievement("achievements", 211) && player.ip.upgrades.length >= 16) completeAchievement("achievements", 211)
+        if (player.bi.IACtoggle && player.bi.IACtype) {
+            player.bi.IACtime = player.bi.IACtime.add(onepersec.mul(delta));
+            if (player.bi.IACtime.gte(player.bi.IACamount) && player.points.gte(1e308)) {
+                player.bi.IACtime = new Decimal(0)
+                if (hasUpgrade("bi", 14)) {
+                        if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                        if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                        if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+                }
+                if (player.ip.crunchMode == "BIG CRUNCH") {
+                    player.tab = "bigc"
+                } else {
+                    queueReset("ip")
+                }
+            }
+        }
+
+        // Check for achievements
+        if (!hasAchievement("achievements", 211) && player.ip.upgrades.length >= 16) completeAchievement("achievements", 211)
 
     },
+    wipeLayer() {
+        
+    },
+    layerChildren() {
+        let lc = ['d','or','rf','pe']
+        if(!hasMilestone("ip", 14)) lc.push('ad')
+        return lc
+    },
+    onPrestige() {
+        player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
+        if(player.in.infinityPointsToGet > 0) {
+            player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet)
+            if (player.po.dice) player.ip.diceRuns = player.ip.diceRuns.add(1)
+            if (player.po.rocketFuel) player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
+            if (player.po.hex || hasUpgrade("s", 18)) player.ip.hexRuns = player.ip.hexRuns.add(1)
+            if (hasUpgrade("ta", 17)) {
+                if (player.d.dicePoints.gt(player.ta.highestDicePoints)) {
+                    player.ta.highestDicePoints = player.d.dicePoints
+                }
+                if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel)) {
+                    player.ta.highestRocketFuel = player.rf.rocketFuel
+                }
+                if (player.h.hexPoint.gt(player.ta.highestHexPoints)) {
+                    if (player.po.hex || hasUpgrade("s", 18)) player.ta.highestHexPoints = player.h.hexPoint
+                }
+            }
+            if (hasUpgrade("bi", 14)) {
+                    if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
+                    if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
+                    if (player.po.hex) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
+            }
+            if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
+            if (!hasAchievement("achievements", 105) && player.in.infinities.gte(3)) completeAchievement("achievements", 105)
+            if (!hasAchievement("achievements", 118) && player.in.infinities.gte(100)) completeAchievement("achievements", 118)
+        }
+    },
+    afterPrestige() {
+        player.points = new Decimal(10)
+        if(player.tab=="bigc") player.tab="ip"
+    },
+
     clickables: {
         11: {
             title() { return "<h2>BIG CRUNCH" },
             canClick() { return player.points.gte('1e308') },
-            unlocked() { return true },
+            unlocked() { return hasMilestone("ip", 21) },
             onClick() {
                 if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
-                if (!hasMilestone("ip", 21)) {
+                if (player.ip.crunchMode == "BIG CRUNCH") {
                     player.tab = "bigc"
                 } else if (hasMilestone("ip", 21)) {
-                    layers.bigc.crunch()
+                    queueReset("ip")
                 }
             },
             style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
         },
+        // 12: {
+        //     title() { return "Mode:" + crunchMode },
+        //     canClick() { return player.points.gte('1e308') },
+        //     unlocked() { return hasMilestone("ip", 21) },
+        //     onClick() {
+        //     },
+        //     style: { width: '300px', "min-height": '120px', borderRadius: '15px' },
+
+        // }
+        101: {
+            title: "Crunch Screen",
+            canClick() { return player.ip.crunchMode !== "BIG CRUNCH" },
+            unlocked() { return hasMilestone("ip", 21) },
+            onClick() {
+                if(player.ip.crunchMode == "BREAK") queueReset("ip")
+                player.ip.crunchMode = "BIG CRUNCH"
+            },
+            style: { width: '100px', "min-height": '60px', borderRadius: '0px' },
+        },
+        102: {
+            title: "Instant",
+            canClick() { return player.ip.crunchMode !== "INSTANT" },
+            unlocked() { return hasMilestone("ip", 21) },
+            onClick() {
+                if(player.ip.crunchMode == "BREAK") queueReset("ip")
+                player.ip.crunchMode = "INSTANT"
+            },
+            style: { width: '100px', "min-height": '60px', borderRadius: '0px' },
+        },
+        103: {
+            title: "Halt",
+            canClick() { return player.ip.crunchMode !== "HALT" },
+            unlocked() { return hasMilestone("ip", 23) },
+            onClick() {
+                if(player.ip.crunchMode == "BREAK") queueReset("ip")
+                player.ip.crunchMode = "HALT"
+            },
+            style: { width: '100px', "min-height": '60px', borderRadius: '0px' },
+        },
+        104: {
+            title: "Break",
+            display: "(Crunch when switching from/to this option)",
+            canClick() { return player.ip.crunchMode !== "BREAK" },
+            unlocked() { return player.in.unlockedBreak },
+            onClick() {
+                queueReset("ip")
+                player.ip.crunchMode = "BREAK"
+            },
+            style: { width: '100px', "min-height": '60px', borderRadius: '0px' },
+        },
+
     },
     bars: {},
     upgrades: {
@@ -395,7 +456,7 @@
             currency() { return player.in.infinityPoints},
             pay(amt) { player.in.infinityPoints = this.currency().sub(amt) },
             effect(x) { return Decimal.pow(2, getBuyableAmount(this.layer, this.id)) },
-            unlocked: true,
+            unlocked() {return hasChallenge("ip", 14)},
             cost(x) { return this.costGrowth().pow(x || getBuyableAmount(this.layer, this.id)).mul(this.costBase()) },
             canAfford() { return this.currency().gte(this.cost()) },
             title() {
@@ -595,7 +656,7 @@
         },
         21: {
             requirementDescription: "<h3>75 Infinities",
-            effectDescription() { return "Skip the big crunch screen, and automatically reset." },
+            effectDescription() { return "Unlock the option to skip the big crunch screen." },
             done() { return player.in.infinities.gte(75) && (hasChallenge("ip", 14) || player.s.highestSingularityPoints.gt(0)) },
             unlocked() { return hasChallenge("ip", 14) },
             style: {width: "600px", height: "55px", color: "rgba(0,0,0,0.5)", border: "5px solid rgba(0,0,0,0.5)", borderRadius: "10px", margin: "-2.5px"},
@@ -671,22 +732,6 @@
                 return player.points.gte(1.79e308)
             },
             rewardDescription: "Unlock new grasshopper studies",
-            onEnter() {
-                //OTF is reset here and not in crunch to prevent a bug
-                player.po.dice = false
-                player.po.rocketFuel = false
-                player.po.hex = false
-                if (player.po.breakInfinity) {
-                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
-                } else {
-                    player.po.featureSlots = player.po.featureSlotsMax
-                }
-
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
-            onExit() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
             onComplete() {if (!hasAchievement("achievements", 107)) completeAchievement("achievements", 107)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
@@ -713,12 +758,6 @@
             },
             rewardDescription: "Unlocks a new check back button at level 125.",
             unlocked() { return hasChallenge("ip", 11) },
-            onEnter() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
-            onExit() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
             onComplete() {if (!hasAchievement("achievements", 109)) completeAchievement("achievements", 109)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
@@ -748,22 +787,6 @@
             },
             rewardDescription: "Permanently unlock hex as an otherworldly feature, and change base hex point formula to:<br><small>(log<sub>60</sub>(Celestial Points+1))<sup>0.6</sup></small>",
             unlocked() { return hasChallenge("ip", 12) },
-            onEnter() {
-                //OTF is reset here and not in crunch to prevent a bug
-                player.po.dice = false
-                player.po.rocketFuel = false
-                player.po.hex = false
-                if (player.po.breakInfinity) {
-                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
-                } else {
-                    player.po.featureSlots = player.po.featureSlotsMax
-                }
-
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
-            onExit() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
             onComplete() {if (!hasAchievement("achievements", 111)) completeAchievement("achievements", 111)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
@@ -794,14 +817,6 @@
             },
             rewardDescription: "Unlocks infinity point buyables and new milestones.",
             unlocked() { return hasChallenge("ip", 13) },
-            onEnter() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-                player.r.pentToGet = new Decimal(0)
-                player.r.pent = new Decimal(0)
-            },
-            onExit() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
             onComplete() {if (!hasAchievement("achievements", 113)) completeAchievement("achievements", 113)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
@@ -815,35 +830,6 @@
             canComplete: function () { return player.points.gte(1.79e308) },
             rewardDescription: "Unlock new booster dice effects, and booster dice automation.",
             unlocked() { return hasChallenge("ip", 14) },
-            onEnter() {
-                //OTF is reset here and not in crunch to prevent a bug
-                player.po.dice = false
-                player.po.rocketFuel = false
-                player.po.hex = false
-                if (player.po.breakInfinity) {
-                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
-                } else {
-                    player.po.featureSlots = player.po.featureSlotsMax
-                }
-
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-
-                player.d.challengeDicePoints = new Decimal(0)
-                player.d.buyables[21] = new Decimal(0)
-                player.d.buyables[22] = new Decimal(0)
-                player.d.buyables[23] = new Decimal(0)
-                player.d.buyables[24] = new Decimal(0)
-
-                for (let i = 0; i < player.d.upgrades.length; i++) {
-                    if (+player.d.upgrades[i] < 100) {
-                        player.d.upgrades.splice(i, 1);
-                        i--;
-                    }
-                }
-            },
-            onExit() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
             onComplete() {if (!hasAchievement("achievements", 116)) completeAchievement("achievements", 116)},
             buttonStyle: {backgroundColor: "white"},
             style: { width: '350px', height: '275px'},
@@ -857,20 +843,9 @@
             rewardDescription: "Unlock new rocket fuel abilities, and gain 20% of rocket fuel per second.",
             unlocked() { return hasChallenge("ip", 15) },
             onEnter() {
-                //OTF is reset here and not in crunch to prevent a bug
                 player.po.dice = false
-                player.po.rocketFuel = false
+                player.po.rocketFuel = true
                 player.po.hex = false
-                if (player.po.breakInfinity) {
-                    player.po.featureSlots = player.po.featureSlotsMax.sub(1)
-                } else {
-                    player.po.featureSlots = player.po.featureSlotsMax
-                }
-
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-            },
-            onExit() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 120)) completeAchievement("achievements", 120)},
             buttonStyle: {backgroundColor: "white"},
@@ -885,12 +860,7 @@
             rewardDescription: "Check back buyables.",
             unlocked() { return hasChallenge("ip", 16) && player.cb.highestLevel.gte(35) },
             onEnter() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
-
                 player.cb.IC7shardCount = 0
-            },
-            onExit() {
-                if (player.points.gt(Infinity)) {layers.bigc.bigCrunch()} else {layers.in.bigCrunch()}
             },
             onComplete() {if (!hasAchievement("achievements", 122)) completeAchievement("achievements", 122)},
             buttonStyle: {backgroundColor: "white"},
@@ -938,23 +908,19 @@
     infoboxes: {},
     microtabs: {
         stuff: {
-            "Upgrades": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return true },
-                content: [
-                    ["blank", "25px"],
-                    ["style-row", [
-                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
-                        ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],
-                        ["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34],
-                        ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]
-                    ], {maxWidth: "625px", padding: "5px 0", backgroundColor: "#332600", border: "3px solid #7f5f00", borderRadius: "20px"}],
-                ]
-            },
             "Milestones": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
                 content: [
+                    ["blank", "25px"],
+                    ["clickable","11"],
+                    ["blank", "10px"],
+                    ["row", [
+                        ["clickable",101],
+                        ["clickable",102],
+                        ["clickable",103],
+                        ["clickable",104],
+                    ]],
                     ["blank", "25px"],
                     ["milestone", 1],
                     ["milestone", 11],
@@ -976,6 +942,22 @@
                     ["milestone", 28],
                 ]
             },
+            "Upgrades": {
+                buttonStyle() { return { color: "white", borderRadius: "5px" } },
+                unlocked() { return true },
+                content: [
+                    ["blank", "25px"],
+                    ["style-row", [
+                        ["upgrade", 11], ["upgrade", 12], ["upgrade", 13], ["upgrade", 14],
+                        ["upgrade", 21], ["upgrade", 22], ["upgrade", 23], ["upgrade", 24],
+                        ["upgrade", 31], ["upgrade", 32], ["upgrade", 33], ["upgrade", 34],
+                        ["upgrade", 41], ["upgrade", 42], ["upgrade", 43], ["upgrade", 44]
+                    ], {maxWidth: "625px", padding: "5px 0", backgroundColor: "#332600", border: "3px solid #7f5f00", borderRadius: "20px"}],
+                    ["blank", "25px"],
+                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
+
+                ]
+            },
             "Challenges": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return hasMilestone("ip", 16) },
@@ -989,14 +971,7 @@
                     ["raw-html", () => { return hasChallenge("ip", 16) && !hasChallenge("ip", 17) && player.cb.highestLevel.lt(35) ? "Unlock Challenge VII by reaching Check Back Level 35" : ""}, { color: "white", fontSize: "24px", fontFamily: "monospace" }],
                 ]
             },
-            "Buyables": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasChallenge("ip", 14) },
-                content: [
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 11], ["ex-buyable", 12], ["ex-buyable", 13], ["ex-buyable", 14]], {maxWidth: "1200px"}],
-                ]
-            },
+
             "Reset": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.in.breakInfinity },
@@ -1031,7 +1006,7 @@
             key: "i", 
             description: "Crunch",
             unlocked() {
-                return player.in.breakInfinity
+                return layers.ip.clickables[11].unlocked()
             },
             onPress() {
                 clickClickable(this.layer, 11)
@@ -1042,7 +1017,7 @@
             key: "I", 
             description: "Crunch",
             unlocked() {
-                return player.in.breakInfinity
+                return layers.ip.clickables[11].unlocked()
             },
             onPress() {
                 clickClickable(this.layer, 11)

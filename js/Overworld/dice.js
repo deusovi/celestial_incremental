@@ -232,7 +232,7 @@
 
         // AUTO BOOSTER DICE CODE
         if (player.d.boosterDiceCooldown.lt(0) && (inChallenge("ip", 15) || player.d.boosterDiceAutomation)) {
-            if (inChallenge("ip", 15)) layers.in.bigCrunch()
+            if (inChallenge("ip", 15)) queueReset("ip")
             let rigged = false
             if (getRandomInt(2) == 0 || hasUpgrade("cs", 802)) {
                 player.d.previousBoosterRoll = player.d.currentBoosterRoll
@@ -305,6 +305,37 @@
         player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e10).add(1)
         if (player.d.challengeDicePoints.gte("1e1000")) player.d.challengeDicePointsEffect2 = player.d.challengeDicePoints.add(1).log(1e100).add(90)
     },
+    wipeLayer() {
+        player.d.dicePoints = new Decimal(0)
+        player.d.diceRolls = [new Decimal(1)]
+        player.d.dice = new Decimal(1)
+
+        for (let i = 0; i < 11; i++) {
+            player.d.boosterEffects[i] = new Decimal(1)
+        }
+        if(!hasUpgrade('s',13)){
+            for (let i = 11; i < 18; i++) {
+                player.d.boosterEffects[i] = new Decimal(1)
+            }
+        }
+
+
+        for (let i = 11; i < 16; i++) {
+            player.d.buyables[i] = new Decimal(0)
+        }
+        if (!inChallenge("ip", 15)) {
+            player.d.challengeDicePoints = new Decimal(0)
+            player.d.challengeDicePointsToGet = new Decimal(0)
+
+            player.d.upgrades.splice(0, player.d.upgrades.length)
+
+            for (let i = 21; i < 25; i++) {
+                player.d.buyables[i] = new Decimal(0)
+            }
+        }
+    },
+    layerChildren: [],
+
     diceRoll() {
         let max = new Decimal(1)
         for (let i = 0; i < player.d.diceRolls.length; i++)
@@ -445,7 +476,7 @@
                 }
 
                 if (inChallenge("ip", 15)) {
-                    layers.in.bigCrunch();
+                    queueReset("ip");
                 }
 
                 if (player.ev.evolutionsUnlocked[5]) player.d.challengeDicePoints = player.d.challengeDicePoints.add(player.d.challengeDicePointsToGet)

@@ -543,31 +543,7 @@ addLayer("co", {
         player.i.upgrades.splice(0, player.i.upgrades.length)
 
         //     <----     RANK LAYER     ---->
-        player.r.rank = new Decimal(0)
-        player.r.tier = new Decimal(0)
-        if (hasMilestone("s", 12)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
-        player.r.pent = new Decimal(0)
 
-        player.r.ranksToGet = new Decimal(0)
-        player.r.tiersToGet = new Decimal(0)
-        player.r.tetrsToGet = new Decimal(0)
-        player.r.pentToGet = new Decimal(0)
-
-        if (!hasMilestone("s", 25)) {
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        player.r.timeCubes = new Decimal(0)
-        player.r.timeCubesPerSecond = new Decimal(0)
-        for (let i in player.r.buyables) {
-            player.r.buyables[i] = new Decimal(0)
-        }
-        player.r.timeReversed = false
 
         //     <----     FACTOR LAYER     ---->
         player.f.factorPower = new Decimal(0)
@@ -823,7 +799,8 @@ addLayer("co", {
         player.ta.upgrades.splice(0, player.ta.upgrades.length)
 
         //     <----     TAV'S DOMAIN LAYER     ---->
-        layers.tad.domainReset(10)
+        queueReset('tad')
+        // NOTE TO SELF: make tad a child of singularity node
 
         if (!hasMilestone("s", 15)) {
             player.tad.upgrades.splice(0, player.tad.upgrades.length)

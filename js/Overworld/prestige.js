@@ -134,7 +134,7 @@
         player.p.prestigePointsToGet = new Decimal(0)
         player.p.prestigeEffect = new Decimal(1)
         player.p.prestigeEffect2 = new Decimal(1)
-        player.p.upgrades = []
+        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) player.p.upgrades.splice(0, player.p.upgrades.length)
 
         //power factors
         if (!hasMilestone("ip", 26)) {
@@ -154,8 +154,9 @@
             onClick() {
                 if (!hasAchievement("achievements", 5)) completeAchievement("achievements", 5)
                 if (!hasAchievement("achievements", 14) && player.r.rank.eq(0) && player.r.tier.eq(0) && player.r.tetr.eq(0)) completeAchievement("achievements", 14)
-                player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet)
-                doReset('p')
+                if(queueReset('p')) {
+                    player.p.prestigePoints = player.p.prestigePoints.add(player.p.prestigePointsToGet)
+                }
             },
             style: { width: '400px', "min-height": '100px', borderRadius: '15px'},
         },
@@ -164,8 +165,9 @@
             canClick() { return player.p.crystalsToGet.gte(1)},
             unlocked() { return true },
             onClick() {
-                player.p.crystals = player.p.crystals.add(player.p.crystalsToGet)
-                doReset('cr')
+                if(queueReset('cr')){
+                    player.p.crystals = player.p.crystals.add(player.p.crystalsToGet)
+                }
             },
             style() {
                 let look = {width: "400px", minHeight: "100px", borderRadius: "15px"}

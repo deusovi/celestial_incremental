@@ -134,6 +134,8 @@
         player.uni["U3"].tickspeed = new Decimal(1)
         player.uni["U3"].tickspeed = player.uni["U3"].tickspeed.mul(player.s.pylonEnergyEffect)
     },
+    wipeLayer() {},
+    layerChildren: ['om','bi','ca','pol','tr','cha','hpw'],
     clickables: {
         11: {
             title() { return "<h2>Build the Universe 3 Pylon<br>Cost: 1e8 Radioactive Core Fragments" },

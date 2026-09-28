@@ -121,32 +121,25 @@ function keyTable(uniID) {
             }
         }
     }
-    else for(r in universes[uniID].tree) { //sort hotkeys by row order in universe
-        for(node of universes[uniID].tree[r]) {
-            if(layers[node].hotkeys)
-                for(hk of layers[node].hotkeys) {
-                        if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                            formatKey(hk,layers[node]),
-                            ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                        ],{'border-style':'solid'}
-                    ])
-                }
-            if(layers[node].innerNodes) {
-               for(innerRow in layers[node].innerNodes){
-                    for(innerNodeIndex in layers[node].innerNodes[innerRow]){
-                        let innerNode = layers[node].innerNodes[innerRow][innerNodeIndex]
-                        if(layers[innerNode].hotkeys) for(hk of layers[innerNode].hotkeys) {
-                                if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
-                                    formatKey(hk,layers[innerNode]),
-                                    ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
-                                ],{'border-style':'solid'}
-                            ])
-                        }
+
+    else for(let r = 0; r < uniMap.length*6;r++) { 
+        let ur = Math.floor(r/6)
+        for(let u of uniMap[ur]) {
+            for(let node of mapUniverses[u].tree[r%6]) {
+                if(layers[node].hotkeys)
+                    for(hk of layers[node].hotkeys) {
+                        if(layers[node].universe == uniID)
+                            if(knownHotkeys[uniID][hk.key] && !hk.global) table.push(["row",[
+                                formatKey(hk,layers[node]),
+                                ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
+                            ],{'border-style':'solid'}
+                        ])
                     }
-               }
             }
         }
     }
+
+
     return table
 }
 

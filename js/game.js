@@ -170,36 +170,64 @@ function generatePoints(layer, diff) {
 }
 
 
+layersToReset = []
+function queueReset(layer) {
+	if(!layersToReset.includes(layer))
+	{
+		layersToReset.push(layer)
+		return true
+	}
+	return false
+}
 
+// this is not the original TMT version of this function
 // uses wipeLayer and layerChildren
 function doReset(layer) {
-
-	console.log('doReset',layer)
 	if (layers[layer].onPrestige) {
 		updateMilestones(layer)
-		run(layers[layer].onPrestige, layers[layer], gain)
+		run(layers[layer].onPrestige, layers[layer])
 	}
 
 	updateMilestones(layer)
 	updateAchievements(layer)
 
+
+	// get topological sort of layer DAG
+	let layersToTraverse = [layer]
+	for(let i=0;i<layersToTraverse.length;i++) {
+		let l = layersToTraverse[i]
+		if(layers[l].layerChildren)
+			layersToTraverse = layersToTraverse.concat(readData(layers[l].layerChildren))
+	}
+	// remove duplicates
+	let layersToWipe = []
+	while(layersToTraverse.length > 0)
+	{
+		let l = layersToTraverse.pop()
+		if(!layersToWipe.includes(l))
+			layersToWipe.push(l)
+	}
+	// list is now ordered base-layers-first; remove target layer from end
+	if(layer !== layersToWipe.pop()) {
+		throw new Error("Layer DAG assembly error!")
+	}
 	//recursively wipe layers
-	//(this part is somewhat inefficient - if A wipes B and C, which both wipe D, then it will reset D multiple times)
-	//(but this shouldn't be a bottleneck)
-	let layersToWipe = layers[layer].layerChildren
 	while(layersToWipe.length > 0) {
 		let l = layersToWipe.pop()
-		console.log(l)
-		if(layers[l].layerChildren)
-			layersToWipe = layersToWipe.concat(layers[l].layerChildren)
 		if(layers[l].wipeLayer)
+		{
 			layers[l].wipeLayer()
+			updateTemp()
+		}
 	}
 
+
+
 	player[layer].resetTime = 0
-	// this was doubled in the original version of this function and i'm not sure why --Deusovi
-	updateTemp()
-	updateTemp()
+
+	if (layers[layer].afterPrestige) {
+		run(layers[layer].afterPrestige, layers[layer])
+	}
 }
 
 
@@ -219,7 +247,7 @@ function startChallenge(layer, x) {
 	} else {
 		enter = true
 	}
-	if (enter || canExitChallenge(layer, x)) doReset(layer, true)
+	if (enter || canExitChallenge(layer, x)) doReset(layer)
 	if (enter) {
 		Vue.set(player[layer], "activeChallenge", x)
 		run(layers[layer].challenges[x].onEnter, layers[layer].challenges[x])
@@ -319,7 +347,7 @@ function gameLoop(diff) {
 		}
 	}
 
-	for (row in OTHER_LAYERS){
+	for (let row in OTHER_LAYERS){
 		for (item in OTHER_LAYERS[row]) {
 			let layer = OTHER_LAYERS[row][item]
 			player[layer].resetTime += diff
@@ -343,8 +371,8 @@ function gameLoop(diff) {
 		}
 	}
 
-	for (row in OTHER_LAYERS){
-		for (item in OTHER_LAYERS[row]) {
+	for (let row in OTHER_LAYERS){
+		for (let item in OTHER_LAYERS[row]) {
 			let layer = OTHER_LAYERS[row][item]
 			if (tmp[layer].autoPrestige && tmp[layer].canReset) doReset(layer);
 			if (layers[layer].automate && !tmp[layer].deactivated) layers[layer].automate();
@@ -352,12 +380,18 @@ function gameLoop(diff) {
 			if (tmp[layer].autoUpgrade) autobuyUpgrades(layer)
 		}
 	}
+	
 
-	for (layer in layers){
+	for (let layer in layers){
 		if (layers[layer].milestones) updateMilestones(layer);
 	}
-
 	updateCutscenes();
+
+	while(layersToReset.length > 0) {
+		doReset(layersToReset.pop())
+	}
+
+
 }
 
 function hardReset(resetOptions) {

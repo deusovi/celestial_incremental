@@ -1802,26 +1802,6 @@
                         ["ex-buyable", 38], ["ex-buyable", 36], ["ex-buyable", 37]], {maxWidth: "900px"}],
                 ]
             },
-            "OTF Synergizer": {
-                buttonStyle() { return { color: "white", borderRadius: "5px" } },
-                unlocked() { return hasUpgrade("ta", 17) },
-                content: [
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "You have <h3>" + format(player.d.dicePoints) + "</h3> dice points. (highest: "  + format(player.ta.highestDicePoints) + ")" }, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return "You have <h3>" + format(player.rf.rocketFuel) + "</h3> rocket fuel. (highest: "  + format(player.ta.highestRocketFuel) + ")"}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return (player.po.hex || hasUpgrade("s", 18)) ? "You have <h3>" + format(player.h.hexPoint) + "</h3> hex points. (highest: " + format(player.ta.highestHexPoints) + ")" :""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return (!player.po.hex && !hasUpgrade("s", 18)) ? "You have <h3><s>" + format(player.h.hexPoint) + "</s></h3> hex points. (highest: " + format(player.ta.highestHexPoints) + ")" : ""}, { color: "white", fontSize: "20px", fontFamily: "monospace" }],
-                    ["blank", "25px"],
-                    ["raw-html", function () { return "Highest values get updated on infinity resets." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
-                    ["raw-html", function () { return "Tip: Use the halter for OTF progression." }, { color: "white", fontSize: "16px", fontFamily: "monospace" }],
-                    ["blank", "25px"],
-                    ["style-row", [["ex-buyable", 41], ["ex-buyable", 42], ["ex-buyable", 43],
-                        ["ex-buyable", 44], ["ex-buyable", 45], ["ex-buyable", 46],
-                        ["ex-buyable", 47], ["ex-buyable", 48], ["ex-buyable", 49],
-                        ["ex-buyable", 51], ["ex-buyable", 52], ["ex-buyable", 53],
-                    ], {maxWidth: "900px"}],
-                ]
-            },
             "RESET": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return player.tad.breakNIP },
@@ -1856,7 +1836,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && hasChallenge("ip", 18)},
+    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && (hasChallenge("ip", 18)>0)},
     hotkeys: [
         {
             key: "n", 
@@ -1941,5 +1921,7 @@ addLayer("revc", {
         ["blank", "150px"],
         ["row", [["clickable", 11]]],
     ],
-    layerShown() { return (player.startedGame == true && hasChallenge("ip", 18)) || hasMilestone("s", 19)}
+    layerShown() {
+         return player.startedGame && (((hasChallenge("ip", 18)>0)) || hasMilestone("s", 19))
+        }
 })

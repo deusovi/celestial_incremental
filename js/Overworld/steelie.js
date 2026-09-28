@@ -48,11 +48,12 @@ addLayer("ste", {
     },
 
     wipeLayer() {
-        player.p.prestigePoints = new Decimal(0)
-        player.p.prestigePointsToGet = new Decimal(0)
-        player.p.prestigeEffect = new Decimal(1)
-        player.p.prestigeEffect2 = new Decimal(1)
-        player.p.upgrades = []
+        player.gh.steel = new Decimal(0)
+        player.gh.steelToGet = new Decimal(0)
+
+        for (let i=31;i<=38;i++) {
+            player.gh.buyables[i] = new Decimal(0)
+        }
     },
     layerChildren: ["pt","m","gh"],
 
@@ -84,18 +85,16 @@ addLayer("ste", {
     layerShown() { return player.startedGame == true && hasUpgrade("i", 24)},
     hotkeys: [
         {
-            key: "y", 
-            description: "Crystallize",
-
+            key: "s", 
+            description: "Steelie",
             unlocked() {
-                return hasUpgrade("i", 24)
-            },
-            isAutomated() {
-                return hasMilestone("s", 16)
+                return hasUpgrade("i", 23)
             },
             onPress() {
                 clickClickable(this.layer, 12)
             },
+
+            style: { color: "white", borderColor: "black", backgroundColor: "grey"}
         },
     ]
 })

@@ -2,7 +2,7 @@ addLayer("tac", {
     name: "Accumulation", 
     color: "#5b629a",
     symbol: "Ac",
-    universe: "U2",
+    universe: "TD",
     tooltip: "Accumulation",
     startData() { return {} },
     wipeLayer() {

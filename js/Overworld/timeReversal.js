@@ -60,6 +60,17 @@ addLayer("tr", {
             if (hasUpgrade("cs", 104)) player.r.timeCubeEffects[i] = player.r.timeCubeEffects[i].pow(2)
         }
     },
+    wipeLayer() {
+        player.r.timeCubes = new Decimal(0)
+        player.r.timeCubesPerSecond = new Decimal(0)
+        for (let i in player.r.buyables) {
+            player.r.buyables[i] = new Decimal(0)
+        }
+        player.r.timeReversed = false
+
+    },
+    layerChildren: ["cr","ste"],
+
     tabFormat:[
         ["layer-proxy",
             ["r",

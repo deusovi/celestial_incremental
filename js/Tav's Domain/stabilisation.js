@@ -1,23 +1,23 @@
-addLayer("tma", {
-    color: "#6d228b",
-    symbol: "Ma",
-    universe: "TD",
-    tooltip: "Magnification",
+addNode("tst", {
+    canClick: true,
+    onClick() {
+        player.subtabs["tad"]["Domain"] = "Stabilization"
+    },
+})
+
+
+
+addLayer("tst", {
+    color: "#b9bcd5",
+    symbol: "St",
+    universe: "U2",
+    tooltip: "Stabilization",
     branches: ["tco"],
 
     wipeLayer() {
-        if (!hasMilestone("tad", 6)) {
-            player.tad.magnification = new Decimal(0)
-            player.tad.magnificationGain = new Decimal(0)
-            for (let i = 0; i < player.tad.milestones.length; i++) {
-                if (+player.tad.milestones[i] < 10) {
-                    player.tad.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
+        
     },
-    layerChildren: ["tco"],
+    layerChildren: [],
     tabFormat: [
         [
             "layer-proxy",[
@@ -45,14 +45,5 @@ addLayer("tma", {
         ]
     ],
 
-    layerShown() {return hasUpgrade("tad", 145)},
-    hotkeys: [
-        {
-            key: "q", 
-            description: "Magnify",
-            onPress() {
-                clickClickable(this.layer, 31)
-            },
-        }
-	]
+    layerShown() {return hasMilestone("s", 11)},
 })

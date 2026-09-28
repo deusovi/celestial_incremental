@@ -1314,68 +1314,32 @@ function loadVue() {
 			</div>
 			<div class="map-tree-uni-row" v-for="ur in data.uniMap" :style="{width: data.width+'px'}">
 				<div class="map-tree-uni" v-for="u in ur" :style="{width: data.clientWidth+'px', height: data.clientHeight+'px'}">
-					<div v-if="mapUniverses[u]" style="display: flex; flex-direction: column; width: 100%; height: 100%">
+					<div v-if="mapUniverses[u]" class="map-tree-uni-interior">
 						<div class="map-tree-margin-row">
 							<div v-for="bn in data.bridgeNodes[u].top" style="height: 100%; align-content: start;">
-								<button 
-								v-if="bn"
-								:id = "bn.id"
-								class = "topBridgeNode bridgeNode can front"
-								:style = "bn.style"
-								v-on:click="function() {
-									if(player.universe == bn.uniFrom) {
-										player.universe = bn.uniTo
-									}
-								}"> ▲ </button>
+								<bridge-node v-if="bn" :data="bn" side="top"></bridge-node>
 							</div>
 						</div>
 						<div class="map-tree-row" v-for="(row,rowIndex) in mapUniverses[u].tree">
 							<div class="margin-node-holder" v-if="data.bridgeNodes[u].left[rowIndex] || data.bridgeNodes[u].right[rowIndex]">
-								<button 
-								v-if="data.bridgeNodes[u].left[rowIndex]"
-								:id = "data.bridgeNodes[u].left[rowIndex].id"
-								class = "leftBridgeNode bridgeNode can front"
-								:style = "data.bridgeNodes[u].left[rowIndex].style"
-								v-on:click="function() {
-									if(player.universe == data.bridgeNodes[u].left[rowIndex].uniFrom) {
-										player.universe = data.bridgeNodes[u].left[rowIndex].uniTo
-									}
-								}"> ◀ </button>
+								<bridge-node :data="data.bridgeNodes[u].left[rowIndex]" side="left"></bridge-node>
 							</div>
 							<div class="margin-node-spacer" />
-							<div class="tree-node-holder" v-for="nodeID in row.filter(nodeID => tmp[nodeID].layerShown !== false)">
+							<div class="tree-node-holder" v-for="nodeID in row.filter(nodeID => readData(layers[nodeID].layerShown) !== false)">
 								<tree-node 
-									:layer='nodeID' :prev='layer' :abb='readData(layers[nodeID].symbol)' :key="key + '-' + r + '-' + nodeID"
+									:layer='nodeID' :prev='layer' :abb='readData(layers[nodeID].symbol)' :key="key + '-' + rowIndex + '-' + nodeID"
 									:size ='readData(layers[nodeID].size)'
 								></tree-node>
 							</div>
 							<div class="margin-node-spacer" />
 							<div class="margin-node-holder" v-if="data.bridgeNodes[u].left[rowIndex] || data.bridgeNodes[u].right[rowIndex]">
-								<button 
-								v-if="data.bridgeNodes[u].right[rowIndex]"
-								:id = "data.bridgeNodes[u].right[rowIndex].id"
-								class = "rightBridgeNode bridgeNode can front"
-								:style = "data.bridgeNodes[u].right[rowIndex].style"
-								v-on:click="function() {
-									if(player.universe == data.bridgeNodes[u].right[rowIndex].uniFrom) {
-										player.universe = data.bridgeNodes[u].right[rowIndex].uniTo
-									}
-								}"> ▶ </button>
+								<bridge-node :data="data.bridgeNodes[u].right[rowIndex]" side="right"></bridge-node>
 							</div>
 						</div>
 
 						<div class="map-tree-margin-row" >
 							<div v-for="bn in data.bridgeNodes[u].bottom" style="height: 100%; align-content: end;">
-								<button 
-								v-if="bn"
-								:id = "bn.id"
-								class = "bottomBridgeNode bridgeNode can front"
-								:style = "bn.style"
-								v-on:click="function() {
-									if(player.universe == bn.uniFrom) {
-										player.universe = bn.uniTo
-									}
-								}"> ▼ </button>
+								<bridge-node v-if="bn" :data="bn" side="bottom"></bridge-node>
 							</div>
 						</div>
 					</div>
@@ -1411,9 +1375,47 @@ function loadVue() {
 		}
 	})
 
-	// Vue.component('side-node', {
-		
-	// })
+	Vue.component('bridge-node', {
+		props: ['layer', 'data', 'side'],
+		computed: {
+			key() {return this.$vnode.key},
+			text() {
+				if(this.side == 'bottom') return "▼"
+				if(this.side == 'top') return "▲"
+				if(this.side == 'left') return "◀"
+				if(this.side == 'right') return "▶"
+			},
+			class() {
+				return this.side+'BridgeNode bridgeNode can front'
+			},
+			gated() {
+				if(!this.data.gateNode) return false
+				return (layers[this.data.gateNode].gateOpen() ? false : this.data.gateNode)
+			}
+		},
+		template: `
+		<div v-if="data">
+			<button 
+				v-if="!this.gated"
+				:id = "data.id"
+				:class = "this.class"
+				:style = "data.style"
+				v-on:click="function() {
+					if(player.universe == data.uniFrom) {
+						player.universe = data.uniTo
+					}
+				}"> {{this.text}} </button>
+			<button 
+				v-else
+				:id = "data.id+'gate'"
+				:class = "this.class"
+				:style = "universes[data.uniTo].nodeStyle()"
+				v-on:click="function() {
+					player.tab = data.gateNode
+				}"> 🔒︎ </button>
+		</div>
+		`
+	})
 
 
 	// Updates the value in player[layer][data]

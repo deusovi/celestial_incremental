@@ -10,7 +10,7 @@ uniMap = [
 mapUniverses = {
     '--': {
         //placeholder
-        tree: []
+        tree: [[],[],[],[],[],[],[]]
     },
     'U1': {
         universe: 'U1',
@@ -19,16 +19,11 @@ mapUniverses = {
         tree: [
             ['minicp'],
             ['r','f','t'],
-            ['p','blank','g'],
+            ['p','U1_center_spacer','g'],
             ['pt','m','gh'],
-            ['minipol','_preOTF','minicha'],
-            // ['cr','d','rf','ste'],
-            
-            // ['rf','i','d','_preOTF2'],
-            
-            ['d','i','rf'],
-            // ['i','pyA','blank'],
-            // ['rf','i','d','_preOTF2'],
+            ['minipol','pe','_preOTF','minicha'],
+            ['d','rf'],
+            ['or'],
         ],
     },
     'U2': {
@@ -43,15 +38,27 @@ mapUniverses = {
         //     ['id','_U2','gd'],
         //     [],
         // ]
-        tree: [
-            ['ad','blank','_CrSt',],
-            ['ta','ip','cr','ste'],
-            ['bi','pyP','tr'],
+        // tree: [
+        //     ['ad','blank','_CrSt',],
+        //     ['ta','ip','cr','ste'],
+        //     ['bi','pyP','tr'],
+        //     ['om','ca','pol','cha'],
+        //     // ['id','gd'],
+        //     ['_U2L','in','_U2R'],
+        //     [],            
+        // ]
+         tree: [
+            ['blank','ad',],
+            ['ip','bi','ta'],
+            ['om','id','_CrSt'],
+            ['cr','ste'],
+            ['pol','tr','cha'],
+            ['ca','pyP'],
+            [],
             
-            ['om','ca','pol','cha'],
             // ['id','gd'],
-            ['_U2L','blank','_U2R'],
-            [],            
+            // ['_U2L','in','_U2R'],
+            // [],            
         ]
     },
     'U3': {
@@ -65,6 +72,7 @@ mapUniverses = {
             ['sma','sme'],
             ['bh'],
             [],
+            [],
         ]
     },
     'CB': {
@@ -77,7 +85,8 @@ mapUniverses = {
             ["ev15", "ev8"],
             ["ep0", "ep1", "ep2"],
             ["sp"],
-            []
+            [],
+            [],
         ],
     },
     'UA': {
@@ -85,12 +94,14 @@ mapUniverses = {
         ux: -1,
         uy: 1,
         tree: [
+            ["hp"],
             ["hpr"],
             ["hsa", "hre", "hcu"],
             ["hpu", "hbl", "hve"],
             ["hrm","hpw"],
             [],
-            []
+            [],
+            
         ],
     },
     'A1': {
@@ -103,7 +114,8 @@ mapUniverses = {
             ['oi','pm','gs'],
             ['cp'],
             ['fu'],
-            ['en']
+            ['en'],
+            [],
         ],
     },
     'UB': {
@@ -116,7 +128,8 @@ mapUniverses = {
             ["bb","fl", "ho"],
             ["al", "wa"],
             ["n", "tw"],
-            []
+            [],
+            [],
         ],
     },
     'D1': {
@@ -129,7 +142,8 @@ mapUniverses = {
             ["dg","dgr","db"],
             ["dn","le","dgj"],
             ["ds","funify","bl","rp","dv"],
-            []
+            [],
+            [],
         ],
     },
     'CH': {
@@ -142,7 +156,8 @@ mapUniverses = {
             [],
             [],
             [],
-            ["lb"]
+            ["lb"],
+            [],
         ],
     },
     'TD': {
@@ -155,7 +170,8 @@ mapUniverses = {
             ["tco"],
             ["tma"],
             [],
-            ["tad","tex"]
+            ["tad","tex"],
+            [],
         ]
     },
     'A2': {
@@ -168,7 +184,8 @@ mapUniverses = {
             ["pl", "se"],
             ["ir"],
             ["sb"],
-            [],            
+            [],        
+            [],    
         ]
     },
     'DS': {
@@ -182,6 +199,7 @@ mapUniverses = {
            ["car"],
            [],
            ["zd"],
+           [],
         ],
     },
 }
@@ -190,28 +208,16 @@ mapUniverses = {
 mapBridgeNodes = [
     {
         universes: ['U1','U2'],
-        shown() {
-            return true
-        }
     },
     {
         universes: ['U2','U3'],
-        shown() {
-            return true
-        }
     },
     {
         universes: ['U1','CB'],
         row: 3,
-        shown() {
-            return true
-        }
     },
     {
         universes: ['CB','UA'],
-        shown() {
-            return true
-        }
     },
     // {
     //     universes: ['U2','UA'],
@@ -225,43 +231,30 @@ mapBridgeNodes = [
     {
         universes: ['U2','UA'],
         row: 5,
-        shown() {
-            return true
-        },
     },
     {
         universes: ['U1','TD'],
         row: 3,
         shown() {
-            return true
+            return hasUpgrade("ta",19)
         },
+        gateNode: 'tdg'
+
     },
     {
         universes: ['U2','A1'],
         row: 5, 
-        shown() {
-            return true
-        },
     },
     {
         universes: ['U3','UB'],
         row: 1,
-        shown() {
-            return true
-        },
     },
     {
         universes: ['U3','A2'],
         row: 1,
-        shown() {
-            return true
-        },
     },
     {
         universes: ['U1','CH'],
-        shown() {
-            return true
-        },
     },
     
     
@@ -292,6 +285,9 @@ mapConnections = [
     ['cr','_CrSt'],
     ['ste','_CrSt'],
     
+
+    ['or','_preOTF'],
+
     {
         connections: [
             ['pol','minipol'],
@@ -302,24 +298,23 @@ mapConnections = [
     // infinity
     {
         connections: [
-            // ['i','d'],
-            // ['i','rf'],
-            // ['ip','_inf'],['_inf','i'],
-            // ['i','U2_to_U1'], ['U1_to_U2','_preOTF'],
+            // ['or','d'],
+            // ['or','rf'],
+            // ['or','U2_to_U1'], ['U1_to_U2','_preOTF'],
             ['ip','U2_to_U1'],
             ['U2_to_U1','d'],
             ['U2_to_U1','rf'],
-            ['U2_to_U1','i'],
-            ['i','_preOTF'],
-            ['i','minipol'],
-            ['i','minicha']
+            ['U2_to_U1','or'],
+            ['or','minipol'],
+            ['or','minicha'],
+            ['or','pe']
         ],
         shown() {return tmp.ip.layerShown},
         style: {color: '#FFCC88'}
     },
     {
         connections: [
-            ['i','CB_to_UA'], //
+            ['or','CB_to_UA'], //
         ],
         shown() {return !hasUpgrade('s',18)},
     },
@@ -335,6 +330,7 @@ mapConnections = [
 
 
     //hex
+    ['hpr','hp'],
     ['hre','hpr'],
     ['hsa','hpr'],
     ['hpu','hre'],
@@ -348,6 +344,7 @@ mapConnections = [
     //U2
     ['ip','ad'],
     ['ta','ad'],
+    ['om','ip'],
 
     ['bi','ip'],
     ['bi','ta'],
@@ -533,6 +530,10 @@ addLayer('maptree', {
 
 
     mapData() {
+
+        let UNIVERSE_HEIGHT = 8 // 7 rows, 1 border cell
+
+
         let mapTreeDiv = document.getElementById('mapTree')
 
         if(mapTreeDiv == null) return {}
@@ -579,7 +580,7 @@ addLayer('maptree', {
                         let newNode = {
                             id: layerID,
                             x: clientWidth * ((mapUniverses[uni].ux - uxMin) + 0.5 + (85/800) * (shownLayerNum*2 - rowNodeCount+1)), //horizontally centered within universe, spaced apart by 2/10 of universe length 
-                            y: clientHeight * ((mapUniverses[uni].uy - uyMin)+ (Number(rowNum)+1)/7) 
+                            y: clientHeight * ((mapUniverses[uni].uy - uyMin)+ (Number(rowNum)+1)/UNIVERSE_HEIGHT) 
                         }
                         nodes[layerID] = newNode
                     }
@@ -604,6 +605,11 @@ addLayer('maptree', {
         }
 
         for(let bn of mapBridgeNodes) {
+
+            if(!bn.shown && (!universes[bn.universes[0]].uniShown() || !universes[bn.universes[1]].uniShown())) continue
+            if(readData(bn.shown) == false) continue
+
+
             let u0 = bn.universes[0]
             let u1 = bn.universes[1]
 
@@ -628,15 +634,18 @@ addLayer('maptree', {
 
             if(ux0 == ux1 && uy0 == uy1) continue;
 
+            let bn0 = {uniTo: u1, uniFrom: u0, id: id0, style: look, gateNode: bn.gateNode}
+            let bn1 = {uniTo: u0, uniFrom: u1, id: id1, style: look, gateNode: bn.gateNode}
+
             //vertical bridge
             if(ux0 == ux1 && uy0 !== uy1) {
                 if(uy0 < uy1) {
-                    bridgeNodes[u0].bottom.push({uniTo: u1, uniFrom: u0, id: id0, style: look})
-                    bridgeNodes[u1].top.push({uniTo: u0, uniFrom: u1, id: id1, style: look})
+                    bridgeNodes[u0].bottom.push(bn0)
+                    bridgeNodes[u1].top.push(bn1)
                 }
                 else {
-                    bridgeNodes[u0].top.push({uniTo: u1, uniFrom: u0, id: id0, style: look})
-                    bridgeNodes[u1].bottom.push({uniTo: u0, uniFrom: u1, id: id1, style: look})
+                    bridgeNodes[u0].top.push(bn0)
+                    bridgeNodes[u1].bottom.push(bn1)
                 }
 
                 nodes[id0] = {
@@ -654,22 +663,22 @@ addLayer('maptree', {
             //horizontal bridge
             if(ux0 !== ux1 && uy0 == uy1) {
                 if(ux0 < ux1) {
-                    bridgeNodes[u0].right[bn.row] = ({uniTo: u1, uniFrom: u0, id: id0, style: look})
-                    bridgeNodes[u1].left[bn.row] = ({uniTo: u0, uniFrom: u1, id: id1, style: look})
+                    bridgeNodes[u0].right[bn.row] = (bn0)
+                    bridgeNodes[u1].left[bn.row] = (bn1)
                 }
                 else {
-                    bridgeNodes[u0].left[bn.row] = ({uniTo: u1, uniFrom: u0, id: id0, style: look})
-                    bridgeNodes[u1].right[bn.row] = ({uniTo: u0, uniFrom: u1, id: id1, style: look})
+                    bridgeNodes[u0].left[bn.row] = (bn1)
+                    bridgeNodes[u1].right[bn.row] = (bn0)
                 }
                 nodes[id0] = {
                     id: id0,
                     x: clientWidth * ((ux0+ux1)/2 + 0.5), 
-                    y: clientHeight * (((uy0+uy1)/2 - uyMin) - 1 + (bn.row+1)/7) 
+                    y: clientHeight * (((uy0+uy1)/2 - uyMin) - 1 + (bn.row+1)/UNIVERSE_HEIGHT) 
                 }
                 nodes[id1] = {
                     id: id1,
                     x: clientWidth * ((ux0+ux1)/2 + 0.5), 
-                    y: clientHeight * (((uy0+uy1)/2 - uyMin) - 1 + (bn.row+1)/7) 
+                    y: clientHeight * (((uy0+uy1)/2 - uyMin) - 1 + (bn.row+1)/UNIVERSE_HEIGHT) 
                 }
             }
         }

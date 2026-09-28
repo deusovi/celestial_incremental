@@ -25,7 +25,6 @@ function pauseUniverse(universe, type = "toggle", temp = false) {
     } else {
         if (temp) player.uni[universe].lastPaused = player.uni[universe].paused
         player.uni[universe].pauseTime = Date.now()
-        if (player.universe == universe) player.universe = 0
         player.uni[universe].paused = true
     }
 }
@@ -258,9 +257,15 @@ addUniverse("CB", {
     symbol: "CB",
     tree: [["cb", "gwaTemple"], ["ev0", "ev1", "ev2", "ev8"], ["ev15", "ev16"], ["ep0", "ep1", "ep2", "sp"]],
     nodeStyle() {
-        return {
+        let style = {
             background: "#094599",
         }
+        if (player.universe=="CB") {
+            style.outline = "2px solid white"
+            style.outlineOffset = "-2px"
+            style.borderWidth = "5px"
+        }
+        return style
     },
     uniShown() { return player.startedGame && hasUpgrade("i", 19) || hasMilestone("ip", 12) || hasMilestone("s", 14)},
     disabled() {return !player.startedGame || (!hasUpgrade("i", 19) && !player.in.unlockedInfinity && player.s.highestSingularityPoints.lte(0)) || player.cp.cantepocalypseActive},
@@ -318,11 +323,12 @@ addUniverse("TD", {
     tree: [["tac"],["tco"],["tma"],["tex"],["tad"]],
     nodeStyle() {
         let style = {
-            background: "black",
+            background: "linear-gradient(150deg, #b2d8d8, 50%, #094242 100%)",
             backgroundOrigin: "border-box",
-            borderColor: "#8a0e79",
-            color: "#cf15b6",
+            borderColor: "#b2d8d8",
+            color: "#b2d8d8",
         }
+        
         if (player.universe=="TD") {
             style.outline = "2px solid white"
             style.outlineOffset = "-2px"
@@ -330,7 +336,7 @@ addUniverse("TD", {
         }
         return style
     },
-    uniShown() { return player.startedGame && tmp.pu.levelables[302].canClick && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge},
+    uniShown() { return player.startedGame && hasUpgrade("ta",21)},
 })
 
 addUniverse("BH", {

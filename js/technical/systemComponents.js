@@ -43,7 +43,7 @@ var systemComponents = {
 			<tooltip
       v-if="run(layers[layer].tooltip, layers[layer]) != ''"
 			:text="(tmp[layer].isLayer) ? (
-				player[layer].unlocked ? (run(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
+				player[layer].unlocked ? (readData(layers[layer].tooltip, layers[layer]) ? run(layers[layer].tooltip, layers[layer]) : formatWhole(player[layer].points) + ' ' + tmp[layer].resource)
 				: (tmp[layer].tooltipLocked ? tmp[layer].tooltipLocked : 'Reach ' + formatWhole(tmp[layer].requires) + ' ' + tmp[layer].baseResource + ' to unlock (You have ' + formatWhole(tmp[layer].baseAmount) + ' ' + tmp[layer].baseResource + ')')
 			)
 			: (

@@ -90,16 +90,22 @@
 
         // START OF PRE-OTF-MULT MODIFIERS
         player.i.preOTFMult = new Decimal(1)
+
         if (hasUpgrade("s", 11)) player.i.preOTFMult = player.i.preOTFMult.mul(10)
         player.i.preOTFMult = player.i.preOTFMult.mul(levelableEffect("pu", 301)[1])
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.i.preOTFMult = player.i.preOTFMult.mul(player.hre.refinementEffect[5][1])
+
+
         if (hasMilestone("r", 20)) player.i.preOTFMult = player.i.preOTFMult.mul(100)
         player.i.preOTFMult = player.i.preOTFMult.mul(player.d.boosterEffects[15])
+
         if (hasMilestone("fa", 22)) player.i.preOTFMult = player.i.preOTFMult.mul(player.fa.milestoneEffect[10])
         player.i.preOTFMult = player.i.preOTFMult.mul(player.depth2.negComboEffect)
 
         player.i.preOTFMult = player.i.preOTFMult.pow(player.i.pylonEnergyEffect2)
         player.i.preOTFMult = player.i.preOTFMult.pow(levelableEffect("car", 301)[0])
+
+
         //----------------------------------------
 
         //cutscene
@@ -149,6 +155,8 @@
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[4][0])
         if (inChallenge("ip", 13) || player.po.hex || hasUpgrade("s", 18)) player.gain = player.gain.mul(player.hpr.rankEffect[5][0])
 
+
+
         // CHALLENGE CONTENT
         player.gain = player.gain.div(player.pe.pestEffect[0])
         if (inChallenge("ip", 13)) player.gain = player.gain.pow(0.75)
@@ -160,15 +168,20 @@
         if (inChallenge("ip", 16)) player.gain = player.gain.mul(player.rf.abilityEffects[0])
         if (hasUpgrade("rf", 17)) player.gain = player.gain.mul(upgradeEffect("rf", 17))
 
+
+            
         // CONTINUED REGULAR MODIFIERS
         if (player.pol.pollinatorEffects.beetle.enabled) player.gain = player.gain.mul(player.pol.pollinatorEffects.beetle.effects[0])
         player.gain = player.gain.mul(buyableEffect("gh", 31))
+
         player.gain = player.gain.mul(player.id.infinityPowerEffect2)
         player.gain = player.gain.mul(player.r.timeCubeEffects[0])
         player.gain = player.gain.mul(player.ca.replicantiEffect3)
         player.gain = player.gain.mul(player.i.preOTFMult)
         player.gain = player.gain.mul(player.co.cores.point.effect[0])
         if (hasUpgrade("ep2", 1)) player.gain = player.gain.mul(upgradeEffect("ep2", 1))
+
+
 
         // POWER MODIFIERS
         if (hasUpgrade("bi", 11)) player.gain = player.gain.pow(1.1)
@@ -181,8 +194,14 @@
         player.gain = player.gain.pow(buyableEffect("cof", 12))
         player.gain = player.gain.pow(buyableEffect("gwaTemple", 22))
 
+
+
+        
+
         // SOFTCAP OF DOOM
         player.i.doomSoftcap = new Decimal(0.5)
+
+
 
         // SOFTCAP OF DOOM START
         player.i.doomSoftcapStart = new Decimal("1e2000000")
@@ -193,6 +212,7 @@
         let doomWeaken = new Decimal(1)
         doomWeaken = doomWeaken.mul(buyableEffect("fa", 401))
         if (player.zarDungeon.zarDefeated) doomWeaken = doomWeaken.mul(1.5)
+
 
         // PLACE ANY BASE MODIFIERS TO SOFTCAP OF DOOM BEFORE SCALING
         let amt = player.points
@@ -210,10 +230,13 @@
         }
         if (player.po.halter.points.enabled == 1) player.gain = player.gain.div(player.po.halter.points.halt)
         if (player.po.halter.points.enabled == 2 && player.gain.gt(player.po.halter.points.halt)) player.gain = player.po.halter.points.halt
-        if (!player.in.breakInfinity && player.gain.gte("9.99e309")) player.gain = new Decimal("9.99e309")
 
         // CELESTIAL POINT PER SECOND
         player.points = player.points.add(player.gain.mul(delta))
+
+        if(player.ip.crunchMode !== "BREAK" && player.points.gte(Number.MAX_VALUE)) {
+            player.points = new Decimal(Number.MAX_VALUE)
+        }
 
         //pylon
         player.i.pylonEnergyMax = Decimal.pow(1e6, player.i.pylonTier)
@@ -348,7 +371,7 @@
         18: {
             title: "Pent",
             unlocked() { return hasUpgrade("i", 17) },
-            description: "Unlocks Pent (in ranks).",
+            description: "Unlocks Pent.",
             cost: new Decimal(1e28),
             currencyLocation() { return player },
             currencyDisplayName: "Celestial Points",
@@ -757,6 +780,7 @@
         if (player.startedGame == false) return true
         return !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge
     },
+    
 
 })
 function callAlert(message, imageUrl, imagePosition = 'top') {

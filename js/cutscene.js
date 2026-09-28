@@ -910,7 +910,7 @@
             background: "#000000",
             portrait: "resources/secret.png",
             music: "music/cutscenePiano.mp3",
-            trigger() {return player.po.breakInfinity},
+            trigger() {return player.ip.crunchMode == "BREAK"},
             dialogue: [
                 { text: "You see a new button appear on the altar.", },
                 { text: '"Break Infinity"', },

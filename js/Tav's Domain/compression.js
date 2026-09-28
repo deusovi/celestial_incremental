@@ -1,7 +1,7 @@
 addLayer("tco", {
     color: "#094242",
     symbol: "Co",
-    universe: "U2",
+    universe: "TD",
     tooltip: "Compression",
     branches: ["tac"],
 

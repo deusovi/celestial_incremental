@@ -44,6 +44,12 @@
             Math.abs(Math.sin(Math.log10(player.pe.pests.add(1)))) * 0.1
         ]
     },
+    wipeLayer() {
+        player.pe.pests = new Decimal(0)
+        player.pe.pestsPerSecond = new Decimal(0)
+        player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
+
+    },
     branches: ["g", "gh"],
     microtabs: {
         stuff: {

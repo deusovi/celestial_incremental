@@ -6,7 +6,6 @@
     startData() { return {
         unlocked: true,
         unlockedInfinity: false,
-        reachedInfinity: false,
         unlockedBreak: false,
         breakInfinity: false,
 
@@ -49,7 +48,7 @@
         if (player.in.delay.gt(0)) {
             player.in.delay = player.in.delay.sub(delta)
             if (player.in.delay.gt(0) && player.in.delay.lte(1)) {
-                layers.in.bigCrunch()
+                queueReset('ip')
                 layers.ta.negativeInfinityReset()
                 for (let i = 0; i < player.r.milestones.length; i++) {
                     if (+player.r.milestones[i] > 20) {
@@ -60,6 +59,9 @@
                 player.in.delay = new Decimal(0)
             }
         }
+        if(player.po.breakInfinity) {
+            player.ip.crunchMode = "BREAK"
+        }
 
         // UNI 2 UNLOCK VARIABLE
         if (player.in.infinityPoints.gt(0) && !player.in.unlockedInfinity) {
@@ -68,8 +70,8 @@
         }
 
         // REACH INFINITY CODE (1e308 POINTS ROUGHLY)
-        if (player.in.reachedInfinity) {
-            if (!player.in.breakInfinity) {
+        if (player.points.gte(Number.MAX_VALUE)) {
+            if (player.ip.crunchMode !== "BREAK") {
                 if (inChallenge("ip", 11) && !hasChallenge("ip", 11)) {
                     if (!hasAchievement("achievements", 107)) completeAchievement("achievements", 107)
                     player.ip.challenges[11] = 1
@@ -93,10 +95,10 @@
                     player.ip.challenges[16] = 1
                     completeChallenge("ip", 16)
                 }
-                if (!hasMilestone("ip", 21) && ((!player.s.highestSingularityPoints.gt(0)))) {
+                if (player.ip.crunchMode == "BIG CRUNCH") {
                     player.tab = "bigc"
-                } else {
-                    layers.bigc.crunch()
+                } else if(player.ip.crunchMode == "INSTANT") {
+                    queueReset("ip")
                 }
             }
         }
@@ -237,218 +239,19 @@
         player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(player.in.pylonEnergyEffect)
         player.uni["U2"].tickspeed = player.uni["U2"].tickspeed.mul(buyableEffect("gwaTemple", 23))
     },
-    bigCrunch() {
-        if (hasUpgrade("ta", 17)) {
-            if (player.d.dicePoints.gt(player.ta.highestDicePoints)) {
-                player.ta.highestDicePoints = player.d.dicePoints
-            }
-            if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel)) {
-                player.ta.highestRocketFuel = player.rf.rocketFuel
-            }
-            if (player.h.hexPoint.gt(player.ta.highestHexPoints)) {
-                if (player.po.hex || hasUpgrade("s", 18)) player.ta.highestHexPoints = player.h.hexPoint
-            }
+    wipeLayer() {
+        for(let n=22;n<=31;n++) {
+            let ind = player.i.upgrades.indexOf(n)
+            if(ind > -1) player.i.upgrades.splice(ind,1)
         }
-
-        //     <----     U1 STUFF     ---->
-        player.points = new Decimal(10)
-        player.gain = new Decimal(0)
-
-        if (!hasMilestone("ip", 25)) {
-            for (let i = 0; i < player.i.upgrades.length; i++) {
-                if (+player.i.upgrades[i] < 22) {
-                    player.i.upgrades.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-
-        //     <----     RANK LAYER     ---->
-        player.r.rank = new Decimal(0)
-        player.r.tier = new Decimal(0)
-        if (hasMilestone("ip", 15) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
-        player.r.pent = new Decimal(0)
-
-        player.r.ranksToGet = new Decimal(0)
-        player.r.tiersToGet = new Decimal(0)
-        player.r.tetrsToGet = new Decimal(0)
-        player.r.pentToGet = new Decimal(0)
-
-        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14)) {
-            for (let i = 0; i < player.r.milestones.length; i++) {
-                if (+player.r.milestones[i] < 20) {
-                    player.r.milestones.splice(i, 1);
-                    i--;
-                }
-            }
-        }
-        
-        //     <----     FACTOR LAYER     ---->
-        player.f.factorPower = new Decimal(0)
-        player.f.factorPowerEffect = new Decimal(1)
-        player.f.factorPowerPerSecond = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i in player.f.buyables) {
-                player.f.buyables[i] = new Decimal(0)
-            }
-        }
-
-        //     <----     PRESTIGE LAYER     ---->
-        player.p.prestigePoints = new Decimal(0)
-        player.p.prestigePointsToGet = new Decimal(0)
-
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) player.p.upgrades.splice(0, player.p.upgrades.length)
-
-        //     <----     TREE LAYER     ---->
-        player.t.trees = new Decimal(0)
-        player.t.treesToGet = new Decimal(0)
-        player.t.leaves = new Decimal(0)
-        player.t.leavesPerSecond = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i in player.t.buyables) {
-                player.t.buyables[i] = new Decimal(0)
-            }
-        }
-
-        //     <----     GRASS LAYER     ---->
-        player.g.grass = new Decimal(0)
-        player.g.grassVal = new Decimal(0)
-        player.g.grassTimer = new Decimal(0)
-
-        player.g.goldGrass = new Decimal(0)
-        player.g.goldGrassVal = new Decimal(0)
-        player.g.goldGrassTimer = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 19; i++) {
-                player.g.buyables[i] = new Decimal(0)
-            }
-        }
-
-        if (!hasMilestone("ip", 11) && !inChallenge("ip", 14)) player.g.upgrades.splice(0, player.g.upgrades.length)
-
-        for (let i = 1; i < 509; ) {
-            setGridData("g", i, [0, new Decimal(1), new Decimal(1)])
-
-            // Increase i value
-            if (i % 10 == 8) {
-                i = i+93
-            } else {
-                i++
-            }
-        }
-
-        //     <----     GRASSHOPPER LAYER     ---->
-        player.gh.grasshoppers = new Decimal(0)
-        player.gh.grasshoppersToGet = new Decimal(0)
-        player.gh.fertilizer = new Decimal(0)
-        player.gh.fertilizerPerSecond = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 1; i < 20; i++) {
-                player.gh.buyables[i] = new Decimal(0)
-            }
-        }
-
-        //     <----     MOD LAYER     ---->
-        player.m.codeExperience = new Decimal(0)
-        player.m.codeExperienceToGet = new Decimal(0)
-        player.m.linesOfCode = new Decimal(0)
-        player.m.linesOfCodePerSecond = new Decimal(0)
-        player.m.mods = new Decimal(0)
-        player.m.modsToGet = new Decimal(0)
-
-        if (!hasMilestone("ip", 26)) {
-            for (let i = 11; i < 15; i++) {
-                player.m.buyables[i] = new Decimal(0)
-            }
-        }
-
-        //     <----     DICE LAYER     ---->
-        player.d.dicePoints = new Decimal(0)
-        player.d.diceRolls = [new Decimal(1)]
-        player.d.dice = new Decimal(1)
-
-        for (let i = 0; i < 11; i++) {
-            player.d.boosterEffects[i] = new Decimal(1)
-        }
-
-        for (let i = 11; i < 16; i++) {
-            player.d.buyables[i] = new Decimal(0)
-        }
-
-        if (!inChallenge("ip", 15)) {
-            player.d.challengeDicePoints = new Decimal(0)
-            player.d.challengeDicePointsToGet = new Decimal(0)
-
-            player.d.upgrades.splice(0, player.d.upgrades.length)
-
-            for (let i = 21; i < 25; i++) {
-                player.d.buyables[i] = new Decimal(0)
-            }
-        }
-
-        //     <----     ROCKETFUEL LAYER     ---->
-        // player.rf.rocketFuel = new Decimal(0)
-        // player.rf.rocketFuelToGet = new Decimal(0)
-        // player.rf.abilityIndex = -1
-
-        // for (let i = 0; i < player.rf.abilitiesUnlocked.length; i++) {
-        //     player.rf.abilitiesUnlocked[i] = false
-        // }
-
-        // for (let i = 0; i < 5; i++) {
-        //     player.rf.abilityTimers[i] = new Decimal(0)
-        //     player.rf.abilityEffects[i] = new Decimal(1)
-        // }
-
-        // player.rf.upgrades.splice(0, player.rf.upgrades.length)
-
-        //     <----     U1 CHALLENGE STUFF     ---->
-        player.pe.pests = new Decimal(0)
-        player.pe.pestsPerSecond = new Decimal(0)
-        player.pe.pestEffect = [new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(1), new Decimal(0)]
-
-        //     <----     POLLINATOR LAYER     ---->
-        player.pol.pollinators = new Decimal(0)
-        player.pol.pollinatorsPerSecond = new Decimal(0)
-
-        //     <----     FACTORY LAYER     ---->
-        player.fa.charge = new Decimal(0)
-        player.fa.chargeRate = new Decimal(0)
-
-
-        //     <----     ANTIMATTER LAYER     ---->
-        if (!hasMilestone("ip", 14)) {
-            player.ad.antimatter = new Decimal(10)
-            player.ad.antimatterPerSecond = new Decimal(0)
-
-            for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
-                player.ad.dimensionAmounts[i] = getBuyableAmount("ad", 11+i)
-                player.ad.dimensionsPerSecond[i] = new Decimal(0)
-            }
-        }
-
-        //     <----     OTF STUFF     ---->
-        if (!player.po.keepOTFS) {
-            player.po.dice = false
-            player.po.rocketFuel = false
-            player.po.hex = false
-            player.po.breakInfinity = false
-            player.po.gwaTemple = false
-            player.in.breakInfinity = false
-            player.po.featureSlots = player.po.featureSlotsMax
-        }
-
-        //     <----     MASTERY POINT STUFF     ---->
-        if (hasUpgrade("bi", 14)) {
-            if (player.po.dice) player.om.diceMasteryPoints = player.om.diceMasteryPoints.add(player.om.diceMasteryPointsToGet)
-            if (player.po.rocketFuel) player.om.rocketFuelMasteryPoints = player.om.rocketFuelMasteryPoints.add(player.om.rocketFuelMasteryPointsToGet)
-            if (player.po.hex || hasUpgrade("s", 18)) player.om.hexMasteryPoints = player.om.hexMasteryPoints.add(player.om.hexMasteryPointsToGet)
-        }
+        let ind = player.i.upgrades.indexOf(101)
+        if(ind > -1) player.i.upgrades.splice(ind,1)
     },
+    layerChildren: ['or','d','rf','pe'],
+    afterPrestige() {
+        player.points = new Decimal(10)
+    },
+
     clickables: {
         11: {
             title() { return "<h2>Build the Universe 2 Pylon<br>Cost: 4,000 Paradox Core Fragments" },
@@ -600,6 +403,24 @@
     },
     microtabs: {
         stuff: {
+            "Upgrades": {
+                unlocked() { return true },
+                content: [
+                    ["layer-proxy",
+                        ["i",
+                            [
+                                ["raw-html", () => {return "You have <h3>" + format(player.points) + "</h3> celestial points (" + format(player.gain) + "/s)."}, {color: "white", fontSize: "24px", fontFamily: "monospace"}],
+                                ["raw-html", () => {return player.gain.gt(player.i.doomSoftcapStart) ? "SOFTCAP OF DOOM: Gain past " + format(player.i.doomSoftcapStart) + " is raised by ^" + format(player.i.doomSoftcap, 3) + "." : ""}, {color: "red", fontSize: "16px", fontFamily: "monospace"}],
+                                ["blank", "25px"],
+                                ["style-row", [
+                                    ["upgrade", 22], ["upgrade", 23], ["upgrade", 24], ["upgrade", 25], ["upgrade", 26], ["upgrade", 27], ["upgrade", 28], ["upgrade", 32],
+                                    ["upgrade", 29], ["upgrade", 30], ["upgrade", 31], ["upgrade", 101],
+                                ], {maxWidth: "800px"}],
+                            ]
+                        ]
+                    ]
+                ],
+            },
             "Lore": {
                 buttonStyle() { return { color: "white", borderRadius: "5px" } },
                 unlocked() { return true },
@@ -652,7 +473,7 @@
         ["microtabs", "stuff", { 'border-width': '0px' }],
         ["blank", "25px"],
     ],
-    layerShown() { return player.startedGame == true && player.in.unlockedInfinity && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
+    layerShown() { return player.startedGame == true && player.in.unlockedBreak && !player.cp.cantepocalypseActive && !player.sma.inStarmetalChallenge}
 })
 addLayer("bigc", {
     name: "Big Crunch", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -677,6 +498,13 @@ addLayer("bigc", {
             player.bigc.spawnedWisps = false
             removeWisps();
         }
+
+
+
+        if ((player.tab == "bigc") && !player.points.gte(Number.MAX_VALUE)) {
+            console.log("what")
+            player.tab = "ip"
+        }
     },
     branches: ["branch"],
     clickables: {
@@ -685,35 +513,10 @@ addLayer("bigc", {
             canClick() { return true },
             unlocked() { return true },
             onClick() {
-                player.tab = "ip"
-
-                layers.bigc.crunch()
+                queueReset("ip")
             },
             style: {width: "300px", minHeight: "120px", border: "3px solid rgba(0,0,0,0.3)", borderRadius: "15px"},
         },
-    },
-    crunch(){
-        player.in.infinityPoints = player.in.infinityPoints.add(player.in.infinityPointsToGet)
-        player.in.infinities = player.in.infinities.add(player.in.infinitiesToGet)
-        if (player.po.dice) player.ip.diceRuns = player.ip.diceRuns.add(1)
-        if (player.po.rocketFuel) player.ip.rocketFuelRuns = player.ip.rocketFuelRuns.add(1)
-        if (player.po.hex || hasUpgrade("s", 18)) player.ip.hexRuns = player.ip.hexRuns.add(1)
-        if (hasUpgrade("ta", 17)) {
-            if (player.d.dicePoints.gt(player.ta.highestDicePoints)) {
-                player.ta.highestDicePoints = player.d.dicePoints
-            }
-            if (player.rf.rocketFuel.gt(player.ta.highestRocketFuel)) {
-                player.ta.highestRocketFuel = player.rf.rocketFuel
-            }
-            if (player.h.hexPoint.gt(player.ta.highestHexPoints)) {
-                if (player.po.hex || hasUpgrade("s", 18)) player.ta.highestHexPoints = player.h.hexPoint
-            }
-        }
-        if (!hasAchievement("achievements", 101)) completeAchievement("achievements", 101)
-        if (!hasAchievement("achievements", 105) && player.in.infinities.gte(3)) completeAchievement("achievements", 105)
-        if (!hasAchievement("achievements", 118) && player.in.infinities.gte(100)) completeAchievement("achievements", 118)
-        layers.in.bigCrunch()
-        player.in.reachedInfinity = false
     },
     bars: {},
     upgrades: {},

@@ -242,8 +242,9 @@
             unlocked() { return true },
             onClick() {
                 if (!hasAchievement("achievements", 17)) completeAchievement("achievements", 17)
-                player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
-                doReset('m')
+                if(queueReset('m')) {
+                    player.m.codeExperience = player.m.codeExperience.add(player.m.codeExperienceToGet)
+                }
             },
             style: { width: '400px', minHeight: '100px', borderRadius: '15px' },
         },

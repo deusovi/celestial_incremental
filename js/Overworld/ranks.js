@@ -159,14 +159,16 @@
     
     wipeLayer() {
         //this one should technically be in a layer above ranks but eh
-        player.points = new Decimal(0)
+        player.points = new Decimal(10)
 
         player.r.ranksToGet = new Decimal(0)
         player.r.tiersToGet = new Decimal(0)
         player.r.tetrsToGet = new Decimal(0)
         player.r.rank = new Decimal(0)
         player.r.tier = new Decimal(0)
-        if (hasMilestone("r", 14) && !inChallenge("ip", 14)) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
+        if (
+            (hasMilestone("r", 14) && !inChallenge("ip", 14)) || hasMilestone("s", 12)
+        ) {player.r.tetr = new Decimal(10)} else {player.r.tetr = new Decimal(0)}
     },
     layerChildren: [],
 
@@ -303,8 +305,9 @@
             onClick() {
                 if (!hasAchievement("achievements", 10)) completeAchievement("achievements", 10)
                 if (!hasAchievement("achievements", 24) && player.r.pent.gte(30)) completeAchievement("achievements", 24)
-                player.r.pent = player.r.pent.add(player.r.pentToGet)
-                doReset('pt')
+                if(queueReset('pt')) {
+                    player.r.pent = player.r.pent.add(player.r.pentToGet)
+                }
             },
             onHold() { clickClickable(this.layer, this.id) },
             style() {

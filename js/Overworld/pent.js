@@ -11,7 +11,7 @@ addLayer("pt", {
     color: '#217777',
     tooltip: "Pent",
     update(delta) {
-                player.r.pentEffect = player.r.pent.add(1).pow(3)
+        player.r.pentEffect = player.r.pent.add(1).pow(3)
         if (hasUpgrade("cs", 102)) player.r.pentEffect = player.r.pentEffect.mul(Decimal.pow(1.08, player.r.pent))
         player.r.pentEffect = player.r.pentEffect.pow(player.p.crystalEffect)
         if (hasUpgrade("hpw", 1011)) player.r.pentEffect = player.r.pentEffect.pow(1.18)
@@ -64,7 +64,7 @@ addLayer("pt", {
     },
     wipeLayer() {
         player.r.pent = new Decimal(0)
-        if (!hasMilestone("s", 25)) {
+        if (!hasMilestone("ip", 15) && !inChallenge("ip", 14) && !hasMilestone("s", 25)) {
             for (let i = 0; i < player.r.milestones.length; i++) {
                 if ((!hasMilestone("s", 12) && +player.r.milestones[i] < 20) || +player.r.milestones[i] >= 20) {
                     player.r.milestones.splice(i, 1);
@@ -133,7 +133,7 @@ addLayer("pt", {
                 return hasUpgrade("i", 27)
             },
             onPress() {
-                clickClickable(this.layer, 13)
+                clickClickable('r', 14)
             },
         },
     ]

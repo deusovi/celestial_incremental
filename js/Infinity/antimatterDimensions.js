@@ -217,6 +217,16 @@
             layers.revc.reverseCrunch();
         }
     },
+    wipeLayer() {
+        player.ad.antimatter = new Decimal(10)
+        player.ad.antimatterPerSecond = new Decimal(0)
+
+        for (let i = 0; i < player.ad.dimensionAmounts.length; i++) {
+            player.ad.dimensionAmounts[i] = getBuyableAmount("ad", 11+i)
+            player.ad.dimensionsPerSecond[i] = new Decimal(0)
+        }
+    },
+    layerChildren: [],
     clickables: {
         2: {
             title() { return "Buy Max On" },

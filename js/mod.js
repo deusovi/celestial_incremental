@@ -4,12 +4,13 @@
 	author: "Icecreamdude",
 	pointsName: "celestial points",
 	modFiles: [
-		"layers.js", "cutscene.js", "tree.js", "Map Tree/mapTree.js", "Map Tree/extraNodes.js", "Overworld/ranks.js", "Overworld/factors.js",
+		"layers.js", "cutscene.js", "tree.js", "Map Tree/mapTree.js", "Map Tree/extraNodes.js", "Overworld/origin.js", "Overworld/ranks.js", "Overworld/factors.js",
 		"Overworld/prestige.js", "Overworld/trees.js", "Overworld/grass.js", "Overworld/grasshop.js", "Overworld/mods.js",
 		"Overworld/pent.js", "Overworld/steelie.js", "Overworld/crystallize.js", "Overworld/timeReversal.js", "Overworld/charger.js",
 		"Check Back/checkback.js", "portal.js", "Overworld/dice.js", "Check Back/evolution.js", "Overworld/rocketFuel.js",
 		"Infinity/infinity.js", "Infinity/antimatterDimensions.js", "Infinity/infinityPoints.js", "Overworld/pests.js",
 		"Infinity/tav.js", "Infinity/tavDomain.js", "Infinity/breakInfinity.js", "lore.js", "Infinity/otfMastery.js",
+		"Tav's Domain/tdgate.js",
 		"Tav's Domain/tavDomain.js","Tav's Domain/accumulation.js","Tav's Domain/compression.js","Tav's Domain/magnification.js","Tav's Domain/exponentiation.js","Tav's Domain/stabilisation.js","Tav's Domain/matter.js",
 		"Infinity/infinityDimensions.js", "Infinity/cante.js", "Infinity/galaxyDust.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
 		"Cantepocalypse/perks.js", "Cantepocalypse/anonymity.js", "Cantepocalypse/repliTrees.js", "Cantepocalypse/repliGrass.js", "Cantepocalypse/grassSkip.js",
@@ -201,8 +202,9 @@ function updateStyles() {
 		case "revc":
 			layerBG = "#31aeb0"
 			break;
+		case "tac": case "tco": case "tma": case "tex":
+			layerBG = "#b2d8d8"
 		case "tad":
-			if (player.subtabs["tad"]["Tabs"] == "Domain") layerBG = "#b2d8d8"
 			if (player.subtabs["tad"]["Tabs"] == "Infinitum") layerBG = "#c8c9fc"
 			if (player.subtabs["tad"]["Tabs"] == "Alternative Infinities") layerBG = "#9dc7fe"
 			break;
@@ -1829,39 +1831,35 @@ let winText = `Congratulations! You have completed the entirety of Celestial Inc
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
 var doNotCallTheseFunctionsEveryTick = [
-	"blowUpEverything", "startCutscene1","startCutscene2", "startCutscene3", "rankReset",
+	"blowUpEverything", "rankReset",
 	"tierReset", "tetrReset", "prestigeReset",
 	"pentReset", "grasshopReset",
 	"levelToXP", "xpToLevel", "levelup", "petButton1", "petButton2",
 	"resetPrices", "addDiceEffect", "diceRoll", "evoCutscenes", "rocketFuelReset",
-	"rocketFuelAbility", "petButton3","bigCrunch", "startCutscene4", "startCutscene5",
-	"dimBoostReset", "startCutscene6", "galaxyReset", "startCutscene7", "startCutscene8",
+	"rocketFuelAbility", "petButton3",
+	"dimBoostReset", "galaxyReset", 
 	"petButton4", "hexReq", "hexGain",
-	"startCutscene9", "startCutscene10", "startCutscene11","crunch", "startCutscene12",
-	"startCutscene13", "startCutscene14", "negativeInfinityReset", "reverseCrunch",
-	"startCutscene15", "startCutscene16", "startCutscene17", "startCutscene18", "breakInfinities",
-	"domainReset", "gainAutomationShard", "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet",
+	"crunch", 
+	"negativeInfinityReset", "reverseCrunch",
+	"breakInfinities",
+	"gainAutomationShard", "sacrificeCommonPet", "sacrificeAllCommonPet", "sacrificeUncommonPet",
 	"sacrificeAllUncommonPet", "sacrificeRarePet", "sacrificeAllRarePet", "steelieReset",
 	"replicantiMultiply", "gainCanteCore", "replicantiPointMultiply", "repliLeavesMultiply", "updateSoftcap",
-	"grassSkipReset", "oilReset", "convertRememberanceCore", "startCutsceneDice",
-	"startCutsceneRocketFuel", "startCutsceneHex", "startRealmModCutscene",
+	"grassSkipReset", "oilReset", "convertRememberanceCore", 
 	"petButton5", "petButton6", "refreshBanner", "commonPetBanner", "uncommonPetBanner",
-	"rarePetBanner", "singularityReset", "instantProduction", "startCutscene19", "startCutscene20",
-	"startCutscene21", "startCutscene22", "startCutscene23", "startCutscene24", "funifyReset",
-	"normalityReset", "startCutscene25", "startCutscene26", "startCutscene27", "startCutscene28",
-	"startCutscene29", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset",
+	"rarePetBanner", "singularityReset", "instantProduction", "funifyReset",
+	"normalityReset", "scrapCore", "starmetalReset", "starmetalResetAgain", "generatorReset",
 	"generateSelection", "addGrass", "petButton7", "evoBanner", "paragonBanner",
 	"gemReset", "ordinalDisplay", "powerBase", "powerReset", "coreXPCalc",
-	"generateCelestialite", "lootCelestialite", "startCutscene30", "startCutscene31", "startCutscene32",
-	"startCutscene33", "startCutscene34", "resetFightCooldown", "starReset", "legendarySummon",
-	"generatePhase1Attack", "generatePhase2Attack", "startCutscene35", "startCutscene36", "startCutscene37",
-	"startCutscene38", "startCutscene39", "cookieClick", "generateFlower", "generateMult", "flowerClick",
+	"generateCelestialite", "lootCelestialite", 
+	"resetFightCooldown", "starReset", "legendarySummon",
+	"generatePhase1Attack", "generatePhase2Attack", "cookieClick", "generateFlower", "generateMult", "flowerClick",
 	"selectCelestialites", "petDeath", "celestialiteDeath", "petAbility", "celestialiteAbility",
 	"arriveAtStar", "spaceEnergyReset", "coinFlip", "randomizeSegments", "spinWheel", "spinSlots", "evaluateRewards",
 	"slotReset", "enhanceReset", "cardReset", "cardDraw", "startGame", "endGame", "resetCreation",
 	"diamondDustReset",
 	"openChest",
-	"checkAchs", "wipeLayer","doReset",
+	"checkAchs", "wipeLayer","doReset","wipeBelow",
 ]
 
 function getStartPoints(){
@@ -2016,7 +2014,7 @@ function fixOldSave(oldVersion){
 	}
 	if (oldVersion < 161) {
 		if (player.points.gt("1e100000")) {
-			layers.bigc.crunch()
+			queueReset("ip")
 		}
 		if (player.ad.antimatter.gt(player.ad.antimatterPerSecond.mul(1e100))) {
 			layers.ta.negativeInfinityReset()

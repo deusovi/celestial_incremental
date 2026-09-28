@@ -58,9 +58,10 @@ function drawTree() {
 			}
 		}
 		else {
-			for(let c of tmp.maptree.mapData.connections) {
-				drawTreeBranch2(c[0],c[1],c[2])
-			}
+			if(layers.maptree.mapData().connections)
+				for(let c of layers.maptree.mapData().connections) {
+					drawTreeBranch2(c[0],c[1],c[2])
+				}
 		}
 
 		drawComponentBranches(player.tab, tmp[player.tab].upgrades, "upgrade-")

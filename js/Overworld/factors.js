@@ -61,7 +61,7 @@
     },
     nodeStyle() {},
     tooltip: "Factors",
-    color() { return "#83cecf" },
+    color: "#83cecf",
     branches() { return !player.zarDungeon.zarDefeated ? "r" : ["r", "t", "g"] },
     update(delta) {
         let onepersec = new Decimal(1)
@@ -167,6 +167,8 @@
             'owned' by trees
         */
         player.f.factorPower = new Decimal(0)
+        player.r.factorPowerEffect = new Decimal(1)
+        player.f.factorPowerPerSecond = new Decimal(0)
     },
     buyables: {
         // Grass Factors

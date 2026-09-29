@@ -266,7 +266,7 @@ addLayer("tad", {
             if (!hasAchievement("achievements", 217) && player.tad.domainCap.gte(1e7)) completeAchievement("achievements", 217)
             if (!hasAchievement("achievements", 214)) completeAchievement("achievements", 214)
             if (player.tad.altInfinities.distorted.milestone.lt(3)) {
-                player.subtabs["tad"]["Domain"] = "Collapse"
+                player.tab = "tcl"
             } else {
                 player.tad.infinitum = player.tad.infinitum.add(player.tad.infinitumGain)
                 player.tad.infinitumResets = player.tad.infinitumResets.add(1)
@@ -487,6 +487,10 @@ addLayer("tad", {
         if (!hasAchievement("achievements", 220) && hasUpgrade("tad", 133)) completeAchievement("achievements", 220)
         if (!hasAchievement("achievements", 222) && player.tad.infinitum.gte(100)) completeAchievement("achievements", 222)
     },
+    wipeLayer() {
+        
+    },
+    layerChildren: ['tex'],
     clickables: {
         1: {
             title: "<h2>Return",
@@ -3186,4 +3190,20 @@ addLayer("tad", {
             },
         }
 	]
+})
+
+
+addLayer("tcl", {
+    name: "Collapse", 
+    symbol: "TD",
+    universe: "TD",
+    row: 1,
+    position: 0,
+    update() {
+        if (player.tab == "tcl" && player.tad.matter.lt(player.tad.domainCap)) player.tab = "tad"
+    },
+    tabFormat: [
+        ["layer-proxy",["tad",[ ["clickable", 2]]]],
+    ]
+
 })

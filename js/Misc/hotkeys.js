@@ -110,7 +110,7 @@ function keyTable(uniID) {
             hk = knownHotkeys.global[k]
             if(hk.layer == "settings")
                 table.push(["row",[
-                    formatKey(hk.key,layers[hk.layer]),
+                    formatKey(hk,layers[hk.layer]),
                             ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
                     ],{'border-style':'solid','border-top':''}
                 ])            
@@ -120,7 +120,7 @@ function keyTable(uniID) {
                 hk = knownHotkeys.global[k]
                 if(hk.uni == u)
                     table.push(["row",[
-                        formatKey(hk.key,layers[hk.layer]),
+                        formatKey(hk,layers[hk.layer]),
                                 ["raw-html","<div style='width:300px;'>"+hk.description+"</div>"]
                         ],{'border-style':'solid','border-top':''}
                     ])            
@@ -150,7 +150,7 @@ function keyTable(uniID) {
 }
 
 
-function formatKey(keyStr, layer) {
+function formatKey(hk, layer) {
 
     let basicKeyStyle = {'font-family':'monospace','font-size':'16px','display':'block','width':'24px','height':'24px','color':'black','align-content':'center','border-style':'solid','margin':'4px','border-color':'rgba(0, 0, 0, 0.3)'}
     let keyStyle = layer.nodeStyle ? 
@@ -160,12 +160,16 @@ function formatKey(keyStr, layer) {
 
     keyStyle.transform = ''
 
-    if(keyStr.startsWith('ctrl+'))
+    if(!hk.key){
+        console.log(hk)
+    }
+
+    if(hk.key.startsWith('ctrl+'))
     {
         keyIcons.push(["display-text","Ctrl", keyStyle])
     }
 
-    if(keyStr.toLowerCase() !== keyStr)
+    if(hk.key.toLowerCase() !== hk.key)
     {
         keyIcons.push(["display-text","⇧", keyStyle])   
     }

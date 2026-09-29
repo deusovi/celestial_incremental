@@ -22,6 +22,21 @@ addLayer("tac", {
     },
     layerChildren: ["tm"],
     tabFormat: [
+        ["tooltip-row", [
+            ["raw-html", () => {return "You have " + formatSimple(player.tad.matter) + " matter"}, {color: "black", fontSize: "24px", fontFamily: "monospace"}],
+            ["raw-html", () => {return "(+" + formatSimple(player.tad.matterGain) + "/s)"}, () => {
+                look = {color: "black", fontSize: "20px", fontFamily: "monospace", marginLeft: "10px"}
+                player.tad.matterGain.gt(0) ? look.color = "black" : look.color = "#666"
+                return look
+            }],
+            ["raw-html", () => {return "<div class='bottomTooltip'>Base Gain<hr><small>(+" + formatSimple(player.tad.matterBase) + "/s)</small></div>"}],
+        ]],
+        ["raw-html", () => {return player.tad.matterGain.gte(1.79e308) ? "Matter Limiter: Gain past 1.79e308 is raised by ^" + formatSimple(player.tad.matterSoftcap, 3) : ""}, {color: "red", fontSize: "20px", fontFamily: "monospace"}],
+        ["tooltip-row", [
+            ["raw-html", () => {return player.tad.matter.gte(player.tad.domainCap) ? "Domain limit reached." : "Domain collapses at " + formatWhole(player.tad.domainCap) + " matter."}, {color: "black", fontSize: "20px", fontFamily: "monospace"}],
+            ["raw-html", () => {return player.tad.matterGain.gt(0) ? "<div class='bottomTooltip'>Time till collapse<hr><small>" + formatTime(player.tad.domainCap.sub(player.tad.matter).div(player.tad.matterGain)) + "</small></div>" : "<div class='bottomTooltip'>Time till collapse<hr><small>∞y ∞d ∞h ∞m ∞s</small></div>"}],
+        ]],
+
         [
             "layer-proxy",[
                 "tad",

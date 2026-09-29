@@ -84,7 +84,6 @@ addNode('hp', {
     },
     tooltip() {return
         format(player.h.hexPoint) + " hex points "
-        // format(player.h.hexPointGain) + "/s"
     },
 })
 

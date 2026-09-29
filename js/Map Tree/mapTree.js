@@ -667,8 +667,8 @@ addLayer('maptree', {
                     bridgeNodes[u1].left[bn.row] = (bn1)
                 }
                 else {
-                    bridgeNodes[u0].left[bn.row] = (bn1)
-                    bridgeNodes[u1].right[bn.row] = (bn0)
+                    bridgeNodes[u0].left[bn.row] = (bn0)
+                    bridgeNodes[u1].right[bn.row] = (bn1)
                 }
                 nodes[id0] = {
                     id: id0,

@@ -179,6 +179,7 @@ function generatePoints(layer, diff) {
 
 layersToReset = []
 function queueReset(layer) {
+	console.log(layer)
 	if(!layersToReset.includes(layer))
 	{
 		layersToReset.push(layer)

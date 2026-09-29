@@ -9,7 +9,7 @@
 		"Overworld/pent.js", "Overworld/steelie.js", "Overworld/crystallize.js", "Overworld/timeReversal.js", "Overworld/charger.js",
 		"Check Back/checkback.js", "portal.js", "Overworld/dice.js", "Check Back/evolution.js", "Overworld/rocketFuel.js",
 		"Infinity/infinity.js", "Infinity/antimatterDimensions.js", "Infinity/infinityPoints.js", "Overworld/pests.js",
-		"Infinity/tav.js", "Infinity/tavDomain.js", "Infinity/breakInfinity.js", "lore.js", "Infinity/otfMastery.js",
+		"Infinity/tav.js", "Infinity/breakInfinity.js", "lore.js", "Infinity/otfMastery.js",
 		"Tav's Domain/tdgate.js",
 		"Tav's Domain/tavDomain.js","Tav's Domain/accumulation.js","Tav's Domain/compression.js","Tav's Domain/magnification.js","Tav's Domain/exponentiation.js","Tav's Domain/stabilisation.js","Tav's Domain/matter.js",
 		"Infinity/infinityDimensions.js", "Infinity/cante.js", "Infinity/galaxyDust.js", "Cantepocalypse/cantepocalypse.js", "Cantepocalypse/altRanks.js",
